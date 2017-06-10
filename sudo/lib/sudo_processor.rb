@@ -119,13 +119,14 @@ module SudoProcessor
         numbers.select { |e| [*e].count > 1 }
     end
 
-    def self.process_step_one(array)
+    def self.process_step_one_core(array)
 
         processed = false
         possible_nums = []
 
         # check the possible numbers in each row, col and box
         # if there is only one choice, then it's the answer
+        # also re-populate the possible numbers
 
         array_ = array.dup
         array_.each_with_index do |row, row_index|
@@ -148,6 +149,19 @@ module SudoProcessor
         return array, processed
     end
 
+    def self.process_step_one(array)
+
+        processed = false
+        possible_nums = []
+
+        while true
+            array, processed = process_step_one_core(array)
+            break if !processed #break if no cell is processed
+        end
+
+        array
+    end
+
     def self.process_step_two(array)
 
         processed = false
@@ -164,7 +178,7 @@ module SudoProcessor
 
                     if possible_nums.count == 1
                         array[row_index][col_index] = possible_nums[0]
-                        array, processed = process_step_one(array)
+                        array = process_step_one(array)
                         processed = true
                     end
 
@@ -172,7 +186,7 @@ module SudoProcessor
 
                     if possible_nums.count == 1
                         array[row_index][col_index] = possible_nums[0]
-                        array, processed = process_step_one(array)
+                        array = process_step_one(array)
                         processed = true
                     end
 
@@ -180,7 +194,7 @@ module SudoProcessor
 
                     if possible_nums.count == 1
                         array[row_index][col_index] = possible_nums[0]
-                        array, processed = process_step_one(array)
+                        array = process_step_one(array)
                         processed = true
                     end
                 end
@@ -249,17 +263,11 @@ module SudoProcessor
         processed = false
         possible_nums = []
 
-        while true
-            array, processed = process_step_one(array)
-            break if !processed #break if no cell is processed
-        end
+        array = process_step_one(array)
 
         array, processed = process_step_two(array)
 
-        while true
-            array, processed = process_step_one(array)
-            break if !processed #break if no cell is processed
-        end
+        array = process_step_one(array)
 
         array, processed = process_step_three(array)
 
