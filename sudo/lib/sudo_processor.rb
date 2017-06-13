@@ -1,11 +1,106 @@
 module SudoProcessor
 
+    class SudoManager
+        attr_accessor :result_list, :debug
+
+        def initialize(data)
+            @result_list = []
+            @result_list << Sudo.new(data)
+        end
+
+        def process
+
+            i = 0
+            while true
+
+                @result_list = process_core(@result_list)
+                i = i +1
+                puts "Round #{i}: #{completed}" if @debug
+
+                if completed
+                    break
+                else
+                    @result_list = generate_for_first_possible(@result_list)
+                end
+
+                break if i >= 9 #exit after 10 rounds
+            end
+
+        end
+
+        def show_results
+            @result_list.each { |e| e.show_results if e.valid? }
+        end
+
+        def completed
+            is_complete = true
+            @result_list.each do |r|
+                if !r.completed?
+                    is_complete = false
+                    break
+                end
+            end
+            is_complete
+        end
+
+        private
+
+        # input: a list of sudo array
+        # output: a list of sudo array after processed
+        def process_core(array)
+            _result_list = []
+            array.each do |e|
+                e.process
+                _result_list << e
+            end
+            # populate result list with new result
+            _result_list
+        end
+
+        # input: a list of sudo array
+        def generate_for_first_possible(array)
+            _result_list = []
+
+            array.each do |sudo_arr|
+                i, j = get_first_possible_index(sudo_arr)
+                first_possible_cell = sudo_arr[i][j]
+                p "possible cell #{i}-#{j}: #{first_possible_cell}" if @debug
+                first_possible_cell.each do |t|
+                    new_array = sudo_arr.dup.tap do |arr|
+                        arr[i][j] = t
+                    end
+                    _result_list << Sudo.new(new_array)
+                end
+            end
+
+            _result_list
+        end
+
+        def get_first_possible_index(array)
+            i, j = nil, nil
+            found = false
+            array.each_with_index do |row, row_index|
+                row.each_with_index do |cell, col_index|
+                    if [*cell].count > 1
+                        i = row_index
+                        j = col_index
+                        found = true
+                        break
+                    end
+                    break if found
+                end
+                break if found
+            end
+            return i, j
+        end
+    end
+
     class Sudo < Array
         attr_accessor :debug, :results
 
-        def initalize(data)
+        def initialize(data)
             super(data)
-            self.debug = false
+            @debug = false
         end
 
         def dup
@@ -13,20 +108,12 @@ module SudoProcessor
         end
 
         def process
-            i = 0
-            processed = true
-            while processed
-                self.results, processed = SudoProcessor.process_runner(self)
-
-                i += 1
-
-                break if !processed #break if no cell is processed
-            end
-            puts "Finished in #{i} rounds" if self.debug
+            @results = SudoProcessor.process_runner(self)
         end
 
 
         def show_results
+            puts "Completed: #{completed?} - Valid: #{valid?}"
             results.each do |t|
                 p t
             end
@@ -51,6 +138,50 @@ module SudoProcessor
 
             valid_result
         end
+
+
+        def completed?
+            is_complete = false
+
+            if valid? or has_duplicate_values
+                is_complete = true
+            end
+
+            is_complete
+        end
+
+
+        def has_duplicate_values
+            already_invalid = false
+            self.each_with_index do |row, row_index|
+                row.each_with_index do |cell, col_index|
+                    row_numbers = SudoProcessor.get_nums_in_row(self, row_index).compact
+                    col_numbers = SudoProcessor.get_nums_in_col(self, col_index).compact
+                    box_numbers = SudoProcessor.get_nums_in_box(self, SudoProcessor.get_box_index(row_index, col_index)).flatten.compact
+
+                    # if current row/col/box already has duplicate value
+                    # do nothing
+                    if row_numbers.uniq.count < row_numbers.count
+                        puts "Row #{row_index} is invalid" if @debug
+                        already_invalid = true
+                        break
+                    end
+                    if col_numbers.uniq.count < col_numbers.count
+                        puts "Column #{col_index} is invalid" if @debug
+                        already_invalid = true
+                        break
+                    end
+                    if box_numbers.uniq.count < box_numbers.count
+                        puts "Box #{get_box_index(row_index, col_index)} is invalid" if @debug
+                        already_invalid = true
+                        break
+                    end
+                end
+                break if already_invalid
+            end
+            already_invalid
+        end
+
     end
 
     # box_index the array has 9 boxes totally
@@ -124,6 +255,12 @@ module SudoProcessor
         processed = false
         possible_nums = []
 
+        # if current row/col/box already has duplicate value
+        # do nothing
+        if array.has_duplicate_values
+            return array, processed
+        end
+
         # check the possible numbers in each row, col and box
         # if there is only one choice, then it's the answer
         # also re-populate the possible numbers
@@ -131,11 +268,15 @@ module SudoProcessor
         array_ = array.dup
         array_.each_with_index do |row, row_index|
             row.each_with_index do |cell, col_index|
+                row_numbers = get_nums_in_row(array_, row_index).compact
+                col_numbers = get_nums_in_col(array_, col_index).compact
+                box_numbers = get_nums_in_box(array_, get_box_index(row_index, col_index)).flatten.compact
+
                 if cell.nil? or [*cell].count > 1
                     possible_nums = (1..9).to_a -
-                        get_nums_in_row(array_, row_index).compact -
-                        get_nums_in_col(array_, col_index).compact -
-                        get_nums_in_box(array_, get_box_index(row_index, col_index)).flatten.compact
+                        row_numbers -
+                        col_numbers -
+                        box_numbers
                     if possible_nums.count == 1
                         array[row_index][col_index] = possible_nums[0]
                         processed = true
@@ -143,6 +284,7 @@ module SudoProcessor
                         array[row_index][col_index] = possible_nums
                     end
                 end
+
             end
         end
 
@@ -260,18 +402,23 @@ module SudoProcessor
 
     def self.process_runner(array)
 
-        processed = false
-        possible_nums = []
+        while true
+            processed = false
 
-        array = process_step_one(array)
+            array = process_step_one(array)
 
-        array, processed = process_step_two(array)
+            array, processed = process_step_two(array)
 
-        array = process_step_one(array)
+            next if processed
 
-        array, processed = process_step_three(array)
+            array, processed = process_step_three(array)
 
-        return array, processed
+            next if processed
+
+            break if !processed #break if no cell is processed
+        end
+
+        array
     end
 
 end

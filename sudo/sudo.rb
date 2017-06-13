@@ -14,7 +14,6 @@ initial_array = SudoProcessor::Sudo.new([
 	[nil,nil,nil,nil,nil,nil,nil,nil,nil]
 				])
 
-
 initial_array = SudoProcessor::Sudo.new([
 	[nil, 7 ,nil,nil,nil,nil,nil, 6 ,nil],
 	[ 6 , 8 , 9 , 7 ,nil,nil,nil, 2 , 1 ],
@@ -37,11 +36,22 @@ initial_array = SudoProcessor::Sudo.new([
 # [5, 2, 6, 4, 9, 8, 3, 1, 7]
 # [9, 1, 7, 5, 3, 6, 2, 4, 8]
 
-initial_array.debug = false
+
+puts "Initial array"
+initial_array.debug = true
+initial_array.each { |e| p e }
 
 initial_array.process
 
-puts "Final: #{initial_array.valid?}"
 initial_array.show_results
 
+# if above process could not figure out the answer completely, try different possibles
+if !initial_array.completed?
 
+	initial_array = SudoProcessor::SudoManager.new(initial_array.dup)
+
+	initial_array.process
+
+	puts "Final after multiple tries:"
+	initial_array.show_results
+end
