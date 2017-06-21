@@ -1,5 +1,8 @@
 module SudoProcessor
 
+
+    # SudoManager holds a list of Sudo to be process
+    # It will also split itself into multiple possible Sudo when trying different possibles
     class SudoManager
         attr_accessor :result_list, :debug
 
@@ -32,6 +35,7 @@ module SudoProcessor
             @result_list.each { |e| e.show_results if e.valid? }
         end
 
+        # check if the whole list is completed
         def completed
             is_complete = true
             @result_list.each do |r|
@@ -57,7 +61,8 @@ module SudoProcessor
             _result_list
         end
 
-        # input: a list of sudo array
+        # generate the possible Sudo for first possible cell
+
         def generate_for_first_possible(array)
             _result_list = []
 
@@ -103,6 +108,7 @@ module SudoProcessor
             @debug = false
         end
 
+        # avoid of Array dup since updating will also affect original varaible
         def dup
             self.map { |e| e.map { |i| i } }
         end
@@ -122,7 +128,7 @@ module SudoProcessor
         def valid?
             valid_result = true
             row_valid, col_valid, box_valid = false, false, false
-            # valid if sudo result
+            # valid if sudo result for each row, col, box
             (1..9).to_a.each do |index|
                 row_valid = ((1..9).to_a - SudoProcessor.get_nums_in_row(self, index-1).compact).empty?
                 col_valid = ((1..9).to_a - SudoProcessor.get_nums_in_col(self, index-1).compact).empty?
@@ -143,6 +149,8 @@ module SudoProcessor
         def completed?
             is_complete = false
 
+            # ideally, you won't see duplicate values
+            # if you see duplicate, then it's all over: completed
             if valid? or has_duplicate_values
                 is_complete = true
             end
