@@ -1,0 +1,14 @@
+aui_base_url:			
+agency_name:			
+username:				
+password:				
+event_id:				13799552
+start_dt:				'2017-01-01'
+end_dt:					'2017-06-30'
+
+totalNetIncome: 		'$164.09'
+payments:				'5'
+registrationNetIncome:	'$80.00'
+otherNetIncome: 		'$120.00'
+discounts:				'-$1.88'
+processingFees:			'-$34.03'
