@@ -3,7 +3,7 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: default
-title: "Blog"
+title: "Zhongxiao37"
 date: 2020-07-28 11:37:00
 categories: other
 ---
