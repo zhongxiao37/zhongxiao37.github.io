@@ -4,6 +4,8 @@ title: Authenticity_token & csrf_token in Rails 5
 date: 2020-07-29 16:34 +0800
 categories: rails
 ---
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
 - [Environment](#environment)
@@ -13,7 +15,9 @@ categories: rails
 - [csrf_token的验证](#csrf_token%E7%9A%84%E9%AA%8C%E8%AF%81)
 - [Decode Session Cookie](#decode-session-cookie)
   - [secret_key_base](#secret_key_base)
+- [FAQ](#faq)
 
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 这边文章是基于[深入 Rails 中的 CSRF Protection][中文帖子]和[A Deep Dive into CSRF Protection in Rails][rails_csrf_token]写的。
 

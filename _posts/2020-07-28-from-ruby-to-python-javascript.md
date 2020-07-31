@@ -9,7 +9,7 @@ categories: ruby python javascript
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [From Ruby To Python](#from-ruby-to-python)
+- [From Ruby To Python, Javascript](#from-ruby-to-python-javascript)
   - [Data types](#data-types)
     - [Boolean](#boolean)
     - [Hash > Dictionary](#hash--dictionary)
@@ -21,6 +21,7 @@ categories: ruby python javascript
     - [puts](#puts)
     - [sort](#sort)
     - [custom sort](#custom-sort)
+    - [shift/unshift/pop/push](#shiftunshiftpoppush)
     - [regex](#regex)
     - [uniq](#uniq)
     - [map](#map)
@@ -29,9 +30,12 @@ categories: ruby python javascript
     - [any?](#any)
     - [group_by > Counter](#group_by--counter)
   - [Exception Handle](#exception-handle)
+  - [Dynanmic methods](#dynanmic-methods)
   - [Others](#others)
     - [List all small characters](#list-all-small-characters)
+    - [concat list](#concat-list)
     - [Convert number to binary](#convert-number-to-binary)
+    - [transalate](#transalate)
     - [permutations](#permutations)
     - [zip](#zip)
     - [unzip](#unzip)
@@ -137,6 +141,8 @@ end
 for i in range(10):
     print(i)
 
+for i in count(start=0, step=1):
+    print(i)
 
 while True:
     quotient = num // output_base
@@ -212,9 +218,27 @@ arr.sort()
 
 ```python
 >>> a = [['a', 7], ['b', 2]]
->>> a.sort(key=lambda e: e[1])
+>>> a.sort(key=lambda e: (e[1], e[0]), reverse=True)
 >>> a
 [['b', 2], ['a', 7]]
+```
+
+### shift/unshift/pop/push
+
+```ruby
+arr = []        # => []
+arr.push(1)     # => [1]
+arr.unshift(2)  # => [2, 1]
+arr.shift       # => 2
+arr.pop         # => 1
+```
+
+```python
+arr = []
+arr.append(1)
+arr.insert(0, 2) # => [2, 1]
+arr.pop(0)      # => 2
+arr.pop()       # => 1
 ```
 
 
@@ -228,6 +252,14 @@ arr.sort()
 import re
 re.findall(r'\d', '1234232432')
 # ['1', '2', '3', '4', '2', '3', '2', '4', '3', '2']
+
+import re
+s = 'a1b2c3'
+s = 'a1b#2c3'
+m = re.match(r'([^#]*)#(.*)', s)
+m.group() # => 'a1b#2c3'
+m.group(1) # => 'a1b'
+m.group(2) # => '2c3'
 ```
 
 ### uniq
@@ -290,8 +322,9 @@ any(x > 3 for x in [1,2,3]) # False
 ```
 
 ```python
-import collection
-dict(collection.Counter([1,2,3,4,5,6,7,1,3]))
+import collections
+dict(collections.Counter([1,2,3,4,5,6,7,1,3]))
+
 ```
 
 
@@ -339,7 +372,7 @@ from string import ascii_lowercase
 ALPHABET = list(ascii_lowercase)
 ```
 
-### contact list
+### concat list
 
 ```ruby
 [1,2,3].join('')
