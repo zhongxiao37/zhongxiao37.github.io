@@ -262,6 +262,17 @@ m.group(1) # => 'a1b'
 m.group(2) # => '2c3'
 ```
 
+### find
+
+```ruby
+lst.find { |e| e == i }
+```
+
+```python
+next(x for x in seq if predicate(x))
+```
+
+
 ### uniq
 
 ```ruby
@@ -392,6 +403,17 @@ ALPHABET = list(ascii_lowercase)
 ```python
 "{0:b}".format(7 % 256)
 ```
+
+### Convert binary to number
+
+```ruby
+'101'.to_i(2)
+```
+
+```python
+int('101', 2)
+```
+
 
 ### transalate
 
