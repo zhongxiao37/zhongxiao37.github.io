@@ -24,5 +24,5 @@ categories: rails nginx
 这些中间件都有同样的模式，即有一个`call`方法，返回`status code`, `header`, `content`。你还可以自己写一个中间件，比如写一个中间件，将所有的cookie都标记为secure true。[1][1][2][2]
 
 
-[1]: [https://www.rubyguides.com/2019/08/puma-app-server/]
-[2]: [https://makandracards.com/makandra/53693-rails-flagging-all-cookies-as-secure-only-to-pass-a-security-audit]
+[1]: https://www.rubyguides.com/2019/08/puma-app-server/
+[2]: https://makandracards.com/makandra/53693-rails-flagging-all-cookies-as-secure-only-to-pass-a-security-audit
