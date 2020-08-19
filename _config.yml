@@ -16,7 +16,7 @@
 title: Zhongxiao37
 email: phoenixson191@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Data and SQL, Ruby, Python, History
+  Database and Ruby, Python, History
 baseurl: "/" # the subpath of your site, e.g. /blog
 url: "http://zhongxiao37.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: zhongxiao37
