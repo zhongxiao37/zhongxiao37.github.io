@@ -154,6 +154,10 @@ for (let [k, v] of Object.entries(dict)) {
   console.log(k);
   console.log(v);
 }
+
+for (const key in dict) {
+  console.log(`${key}: ${dict[key]}`);
+}
 ```
 
 
