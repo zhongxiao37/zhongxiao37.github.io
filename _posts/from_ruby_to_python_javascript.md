@@ -214,6 +214,10 @@ arr.sort()
 [['b', 2], ['a', 7]]
 ```
 
+```javascript
+var points = [40, 100, 1, 5, 25, 10];
+points.sort(function(a, b){return a - b}); 
+```
 
 ### regex
 
@@ -429,6 +433,17 @@ print ("The unzipped result: \n",end="")
 # printing initial lists 
 print ("The name list is : ",end="") 
 print (namz) 
+```
+
+### sleep
+
+```javascript
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+console.log("Hello");
+sleep(2000).then(() => { console.log("World!"); });
 ```
 
 
