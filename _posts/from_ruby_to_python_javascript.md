@@ -231,6 +231,35 @@ re.findall(r'\d', '1234232432')
 # ['1', '2', '3', '4', '2', '3', '2', '4', '3', '2']
 ```
 
+### concat two arrays
+
+```ruby
+[1,2,3] + [4, 5, 6]
+```
+
+```python
+b = [1,2,3]
+b.extend([5,4,6])
+```
+
+```javascript
+var a = [1,2,3]
+// don't use + as it will return '1,2,34,5,6'
+a.push(...[4,5,6])
+a //[1,2,3,4,5,6]
+```
+
+### id
+
+```ruby
+a.object_id
+```
+
+```python
+id(a)
+```
+
+
 ### uniq
 
 ```ruby
@@ -340,7 +369,7 @@ from string import ascii_lowercase
 ALPHABET = list(ascii_lowercase)
 ```
 
-### contact list
+### concat list
 
 ```ruby
 [1,2,3].join('')
