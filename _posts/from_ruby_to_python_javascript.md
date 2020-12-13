@@ -313,6 +313,30 @@ reduce(lambda sum, x: sum + x, [1,2,3], 0)
 any(x > 3 for x in [1,2,3]) # False
 ```
 
+### merge
+
+```ruby
+a = {name: 'phx', age: 12}
+a.merge({gender: 'male'})
+```
+
+```python
+In [51]: a = {'name': 'phx', 'age': 12 }
+
+In [52]: a
+Out[52]: {'name': 'phx', 'age': 12}
+
+In [53]: a.update({'gender': 'male'})
+
+In [54]: a
+Out[54]: {'name': 'phx', 'age': 12, 'gender': 'male'}
+```
+
+```javascript
+
+
+```
+
 ### group_by > Counter
 
 ```ruby
