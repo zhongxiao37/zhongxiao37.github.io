@@ -240,6 +240,7 @@ re.findall(r'\d', '1234232432')
 ```python
 b = [1,2,3]
 b.extend([5,4,6])
+b + [7,8,9]
 ```
 
 ```javascript
