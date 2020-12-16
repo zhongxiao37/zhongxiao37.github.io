@@ -2,7 +2,7 @@
 layout: default
 title: Build Jenkins on Docker, install rvm and test pipeline
 date: 2020-12-16 15:40 +0800
-categories: docker, jenkins
+categories: docker jenkins
 ---
 
 原生的Jenkins镜像里面没有rvm，虽然说有rvm插件，但是依旧不好用，而且好几年没有maintain，也不知道现在还有人用没有。基于Jenkins的centos7镜像，安装rvm，并安装Ruby 2.6.6。版本号可以根据自己的需求改。
