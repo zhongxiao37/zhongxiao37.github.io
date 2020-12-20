@@ -307,6 +307,22 @@ a.object_id
 id(a)
 ```
 
+### class
+
+```ruby
+'str'.class
+```
+
+```python
+type('123')
+```
+
+```javascript
+var a = '1,2,3'
+a.__prop__.constructor
+```
+详见[继承关系]({% post_url 2020-12-04-es6中的继承和mixin %})
+
 ### uniq
 
 ```ruby
