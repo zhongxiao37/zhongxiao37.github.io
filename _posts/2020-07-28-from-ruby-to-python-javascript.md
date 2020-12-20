@@ -23,11 +23,15 @@ categories: ruby python javascript
     - [custom sort](#custom-sort)
     - [shift/unshift/pop/push](#shiftunshiftpoppush)
     - [regex](#regex)
+    - [find](#find)
+    - [concat two arrays](#concat-two-arrays)
+    - [id](#id)
     - [uniq](#uniq)
     - [map](#map)
     - [select > filter](#select--filter)
     - [reduce](#reduce)
     - [any?](#any)
+    - [merge](#merge)
     - [group_by > Counter](#group_by--counter)
   - [Exception Handle](#exception-handle)
   - [Dynanmic methods](#dynanmic-methods)
@@ -35,10 +39,12 @@ categories: ruby python javascript
     - [List all small characters](#list-all-small-characters)
     - [concat list](#concat-list)
     - [Convert number to binary](#convert-number-to-binary)
+    - [Convert binary to number](#convert-binary-to-number)
     - [transalate](#transalate)
     - [permutations](#permutations)
     - [zip](#zip)
     - [unzip](#unzip)
+    - [sleep](#sleep)
     - [Not supporting method chaining](#not-supporting-method-chaining)
     - [Return data](#return-data)
 
@@ -272,6 +278,34 @@ lst.find { |e| e == i }
 next(x for x in seq if predicate(x))
 ```
 
+### concat two arrays
+
+```ruby
+[1,2,3] + [4, 5, 6]
+```
+
+```python
+b = [1,2,3]
+b.extend([5,4,6])
+b + [7,8,9]
+```
+
+```javascript
+var a = [1,2,3]
+// don't use + as it will return '1,2,34,5,6'
+a.push(...[4,5,6])
+a //[1,2,3,4,5,6]
+```
+
+### id
+
+```ruby
+a.object_id
+```
+
+```python
+id(a)
+```
 
 ### uniq
 
@@ -324,6 +358,31 @@ reduce(lambda sum, x: sum + x, [1,2,3], 0)
 
 ```python
 any(x > 3 for x in [1,2,3]) # False
+```
+
+### merge
+
+```ruby
+a = {name: 'phx', age: 12}
+a.merge({gender: 'male'})
+```
+
+```python
+In [51]: a = {'name': 'phx', 'age': 12 }
+
+In [52]: a
+Out[52]: {'name': 'phx', 'age': 12}
+
+In [53]: a.update({'gender': 'male'})
+
+In [54]: a
+Out[54]: {'name': 'phx', 'age': 12, 'gender': 'male'}
+```
+
+```javascript
+var a = { a: 1 }
+var b = Object.assign(a, { b: 2 })
+// {a: 1, b: 2}
 ```
 
 ### group_by > Counter
@@ -487,6 +546,18 @@ print ("The unzipped result: \n",end="")
 # printing initial lists 
 print ("The name list is : ",end="") 
 print (namz) 
+```
+
+
+### sleep
+
+```javascript
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+console.log("Hello");
+sleep(2000).then(() => { console.log("World!"); });
 ```
 
 
