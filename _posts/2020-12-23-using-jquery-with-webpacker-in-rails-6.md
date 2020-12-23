@@ -109,7 +109,7 @@ module.exports = environment
 
 ## More about Webpack
 
-下面更多的是关于webpack，已经超过了这个标题所描述的范围了。
+下面更多的是关于webpack[5][5][6][6]，已经超过了这个标题所描述的范围了。
 
 通过rails升级过来的，还需要运行`rails webpacker:install`来安装webpacker。安装完以后，就会多出这样的配置文件。
 
