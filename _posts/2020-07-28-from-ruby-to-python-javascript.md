@@ -315,6 +315,7 @@ id(a)
 
 ```python
 type('123')
+'123'.__class__
 ```
 
 ```javascript
