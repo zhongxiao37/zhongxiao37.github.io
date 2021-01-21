@@ -166,9 +166,46 @@ from information_schema.columns
 where TABLE_NAME = 'tbl' AND TABLE_SCHEMA = 'db';
 ```
 
+### CAST AS VARCHAR
+
+VARCHAR is not supported. Following is the supported data types.
+
+ - BINARY[(N)]
+ - CHAR[(N)]
+ - DATE
+ - DATETIME
+ - DECIMAL[(M[,D])]
+ - SIGNED [INTEGER]
+ - TIME
+ - UNSIGNED [INTEGER]
+
+### user defined variable @var will cause bad query plan
+
+Per [https://stackoverflow.com/a/53462860][3], the data type of `@var` could be anything. Query optimizer will ignore the index on col `id` in this scenario. 
+
+```sql
+SET @id = "test1234567";
+select @id;
+
+EXPLAIN SELECT *
+FROM TBL
+WHERE id = @id;
+```
+
+You have two options. One is to use local variable in SP. Or you could explictly specify the data type for the user defined variable, like below.
+
+```sql
+SET @id = CONVERT(CAST("test1234567" AS CHAR(255)) USING ASCII);
+select @id;
+
+EXPLAIN SELECT *
+FROM TBL
+WHERE id = @id;
+```
 
 
 
 [1]: https://stackoverflow.com/a/36869589
 [2]: https://stackoverflow.com/a/54997037/835239
+[3]: https://stackoverflow.com/a/53462860
 
