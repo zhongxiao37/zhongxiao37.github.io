@@ -24,3 +24,18 @@ services:
 然后本地连接3329端口即可。之前是有ssh作为跳板，所以可以加速ssh连接。这次没有ssh跳板，MySQL连接用的是TCP/IP，所以需要做一次TCP的端口转发。
 
 至此，无论有没有ssh跳板，都可以通过HTTP Proxy进行加速。
+
+
+如果是SOCKS代理，可以用下面的命令
+
+```bash
+socat TCP4-LISTEN:<本地端口>,reuseaddr,fork SOCKS:<代理服务器IP>:<远程地址>:<远程端口>,socksport=<代理服务器端口> 
+```
+
+### Reference
+
+1. [https://www.yuque.com/supersec/softwaretips/socat#3f72e69d][1]
+2. [TCP/IP网络协议][1]
+
+[1]: https://www.yuque.com/supersec/softwaretips/socat#3f72e69d
+[2]: https://juejin.cn/post/6844903510509633550
