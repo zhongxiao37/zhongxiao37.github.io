@@ -11,17 +11,96 @@ From SQL Server To MySQL
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [Outer apply](#outer-apply)
-- [Row_number()](#row_number)
-- [select into](#select-into)
-- [all index](#all-index)
-- [table size](#table-size)
-- [table status](#table-status)
-- [login permissions](#login-permissions)
-- [extend the `group_concat()` length limitation](#extend-the-group_concat-length-limitation)
+- [Table](#table)
+  - [select into](#select-into)
+  - [all index](#all-index)
+  - [table size](#table-size)
+  - [table status](#table-status)
+- [Procedure](#procedure)
+  - [获取SP的修改时间](#%E8%8E%B7%E5%8F%96sp%E7%9A%84%E4%BF%AE%E6%94%B9%E6%97%B6%E9%97%B4)
+- [View](#view)
+  - [视图修改时间](#%E8%A7%86%E5%9B%BE%E4%BF%AE%E6%94%B9%E6%97%B6%E9%97%B4)
+- [Security](#security)
+  - [login permissions](#login-permissions)
+- [SQL scripts](#sql-scripts)
+  - [Outer apply](#outer-apply)
+  - [Row_number()](#row_number)
+  - [extend the `group_concat()` length limitation](#extend-the-group_concat-length-limitation)
+  - [CAST AS VARCHAR](#cast-as-varchar)
+  - [user defined variable @var will cause bad query plan](#user-defined-variable-var-will-cause-bad-query-plan)
+  - [Tipping point?](#tipping-point)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+
+
+## Table
+
+### select into
+同样不会复制表结构的索引，主键。
+
+```sql
+CREATE TABLE new_tbl [AS] SELECT * FROM orig_tbl;
+```
+
+### all index
+
+```sql
+SELECT a.TABLE_SCHEMA,
+a.TABLE_NAME,
+a.index_name,
+GROUP_CONCAT(column_name ORDER BY seq_in_index) AS `Columns`
+FROM information_schema.statistics a
+GROUP BY a.TABLE_SCHEMA,a.TABLE_NAME,a.index_name;
+```
+
+
+### table size
+
+```sql
+SELECT 
+    table_name AS `Table`, 
+    round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB` 
+FROM information_schema.TABLES 
+WHERE table_schema = "db"
+    AND table_name = "tbl";
+```
+
+### table status
+```sql
+show table status like 'tbl';
+show index from tbl;
+show columns from tbl;
+```
+
+
+## Procedure
+
+### 获取SP的修改时间
+
+```sql
+SHOW PROCEDURE STATUS LIKE 'sp1'\G
+```
+
+
+## View
+
+### 视图修改时间
+
+没法。视图只是一个定义，最多从`show create view vw`中看到谁创建的。
+
+
+## Security
+
+### login permissions
+```sql
+show grants for `phoenix.zhong`;
+```
+
+
+
+
+## SQL scripts
 
 ### Outer apply
 
@@ -114,49 +193,6 @@ ORDER BY col
 2. 针对col分区的第二条记录，第一个WHEN会返回true，这个时候就@r就会增加1
 3. 最最关键的地方，就是第二个WHEN。当第一个WHEN返回false的时候，即用来分区的col发生了变化，这个时候会执行第二个WHEN。但是无论@prevcol是任何值，` = null`永远都是false。这里是SQL里面的一个语法点。`null = null`是`false`，而`null is null`才是`true`。所以，这里THEN后面的null永远不会出现。这行的作用就只是用来更新@prevcol
 
-
-### select into
-同样不会复制表结构的索引，主键。
-
-```sql
-CREATE TABLE new_tbl [AS] SELECT * FROM orig_tbl;
-```
-
-### all index
-
-```sql
-SELECT a.TABLE_SCHEMA,
-a.TABLE_NAME,
-a.index_name,
-GROUP_CONCAT(column_name ORDER BY seq_in_index) AS `Columns`
-FROM information_schema.statistics a
-GROUP BY a.TABLE_SCHEMA,a.TABLE_NAME,a.index_name;
-```
-
-
-### table size
-
-```sql
-SELECT 
-    table_name AS `Table`, 
-    round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB` 
-FROM information_schema.TABLES 
-WHERE table_schema = "db"
-    AND table_name = "tbl";
-```
-
-### table status
-```sql
-show table status like 'tbl';
-show index from tbl;
-show columns from tbl;
-```
-
-### login permissions
-```sql
-show grants for `phoenix.zhong`;
-```
-
 ### extend the `group_concat()` length limitation
 
 ```sql
@@ -202,6 +238,9 @@ EXPLAIN SELECT *
 FROM TBL
 WHERE id = @id;
 ```
+
+### Tipping point?
+
 
 
 
