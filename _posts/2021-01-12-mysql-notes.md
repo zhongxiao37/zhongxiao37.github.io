@@ -215,6 +215,42 @@ VARCHAR is not supported. Following is the supported data types.
  - TIME
  - UNSIGNED [INTEGER]
 
+### 隐式转换的坑
+
+隐式转换有些问题，如果对索引列用函数，就无法使用索引；如果对查询值用函数，就可以正确使用索引。字符集也会影响索引的使用，不同的字符集在底层存储上是不一样的，无论在JOIN还是WHERE都需要先统一转换类型，才可以进行下一步操作。
+
+[SQL SERVER](http://zhongxiao37.blogspot.com/2016/08/the-conversion-of-varchar-value.html) 里面会有隐式转换的问题，在MySQL里面也有类似问题。
+
+```sql
+CREATE TABLE `tmp` (
+  `id` varchar(50) DEFAULT NULL
+);
+
+INSERT INTO tmp (ID) VALUES (10), (10000000000000), (18446744073709551616);
+-- 这里不会有任何问题，数字会被转换成为varchar(50)
+
+select * from tmp;
+select * from tmp where id = 10;
+select * from tmp where id = 10000000000000;
+select * from tmp where id = 18446744073709551616;
+```
+以上也都可以正常查找。
+
+但是，如果用`>`，就会出问题了。也就是说，虽然比较字符串和数字的时候，会把字符串转换成数字，但还是会有这样或者那样的隐藏的坑。比如，下面4个select都不会返回结果。
+
+```sql
+select * from tmp where id > 18446744073709551616; -- no records
+select * from tmp where id > 18446744073709551615; -- no records
+select * from tmp where id > 18446744073709551614; -- no records
+select * from tmp where id > 18446744073709551613; -- no records
+```
+
+直到你用小于`18446744073709550592`的数字去比较的时候，才会有结果。有趣的是，`18446744073709550592`的二进制是`1111111111111111111111111111111111111111111111111111110000000000`，最后10位为0。
+```sql
+select * from tmp where id > 18446744073709550592; -- no records
+select * from tmp where id > 18446744073709550591; -- one records
+```
+
 ### user defined variable @var will cause bad query plan
 
 Per [https://stackoverflow.com/a/53462860][3], the data type of `@var` could be anything. Query optimizer will ignore the index on col `id` in this scenario. 
