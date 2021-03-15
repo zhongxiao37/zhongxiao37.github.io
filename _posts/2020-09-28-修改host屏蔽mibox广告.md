@@ -44,6 +44,11 @@ categories: xiaomi
 127.0.0.1    qtsftl.m.cn.miaozhen.com
 ```
 
+这样只是暂时工作而已，因为Hosts文件过一会儿就被重置。
+
+这个时候需要创建一个`/jffs/configs/hosts`文件，内容如上。然后在添加`/jffs/dnsmasq.conf.add`，内容为`addn-hosts=/jffs/configs/hosts`。
+
+
 这样以后，针对小米资源的视频，就没有广告了，不用掏钱买VIP了。省了VIP的钱，打个赏呗~
 
 ![img](/images/alipay_receiver_qrcode.jpg)
