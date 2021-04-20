@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
     <link rel="stylesheet" type="text/css" href="{{ '/assets/css/print.css' | relative_url }}" media="print">
     <link rel="stylesheet" href="{{ '/assets/css/bootstrap.css' }}">
+    <link rel="stylesheet" href="{{ '/assets/css/header.css' }}">
     <script type="text/javascript" defer="defer" src="{{ '/assets/js/jquery.min.js' }}"></script>
     <script type="text/javascript" defer="defer" src="{{ '/assets/js/bootstrap.js' }}"></script>
     <script type="text/javascript" defer="defer" src="{{ '/assets/js/style.js' }}"></script>
@@ -18,14 +19,19 @@
 
   <body>
     <div class="container-fluid">
+      <div class="header">
+        <div class="container">
+          <div class="row">
+            <header>
+              <h1>{{ page.title | default: site.title | default: site.github.repository_name }}</h1>
+              <h2>{{ page.description | default: site.description | default: site.github.project_tagline }}</h2>
+            </header>
+          </div>
+        </div>
+      </div>
       <div class="row">
         <div class="col-1"></div>
         <div class="col-10">
-
-          <header>
-            <h1>{{ page.title | default: site.title | default: site.github.repository_name }}</h1>
-            <h2>{{ page.description | default: site.description | default: site.github.project_tagline }}</h2>
-          </header>
           <section id="downloads" class="clearfix">
             {% if site.show_downloads %}
             <a href="{{ site.github.zip_url }}" id="download-zip" class="button"><span>Download .zip</span></a>
