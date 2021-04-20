@@ -1,18 +1,22 @@
 ---
 layout: default
-title: From Ruby To Python/Javascript
+title: From Ruby To Python/Javascript/Go
 date: 2020-07-28 17:04 +0800
-categories: ruby python javascript
+categories: ruby python javascript golang
 ---
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [From Ruby To Python, Javascript](#from-ruby-to-python-javascript)
+- [From Ruby To Python, Javascript, Go](#from-ruby-to-python-javascript-go)
+  - [Ruby](#ruby)
+  - [Python](#python)
+  - [Javascript](#javascript)
+  - [Go](#go)
   - [Data types](#data-types)
     - [Boolean](#boolean)
-    - [Hash > Dictionary](#hash--dictionary)
+    - [Hash](#hash)
     - [Array > List](#array--list)
   - [Control flow](#control-flow)
     - [If...else](#ifelse)
@@ -26,6 +30,7 @@ categories: ruby python javascript
     - [find](#find)
     - [concat two arrays](#concat-two-arrays)
     - [id](#id)
+    - [class](#class)
     - [uniq](#uniq)
     - [map](#map)
     - [select > filter](#select--filter)
@@ -53,44 +58,85 @@ categories: ruby python javascript
 
 
 
-# From Ruby To Python, Javascript
+# From Ruby To Python, Javascript, Go
+{: .-row}
+
+{: .col-3.secondary}
+## Ruby
+
+{: .col-3}
+## Python
+
+{: .col-3}
+## Javascript
+
+{: .col-3}
+## Go
+
 
 ## Data types
 
 ### Boolean
+{: .-row}
 
+{: .col-3}
 ```ruby
 true
 false
 ```
 
+{: .col-3}
 ```python
 True
 False
 ```
 
+{: .col-3}
 ```javascript
 true
 false
 ```
 
-### Hash > Dictionary
+{: .col-3}
+```go
+true
+false
+```
 
+### Hash
+{: .-row}
+
+{: .col-3}
 ```ruby
+# Hash
 {a: 1, b: 2, c: 3}
 ```
 
+{: .col-3}
 ```python
+# Dictionary
 {'a': 1, 'b': 2, 'c': 3}
 ```
 
-In javascript, it should be Object
+{: .col-3}
 ```javascript
+// Object
 {'a': 1, 'b': 2, 'c': 3}
+```
+
+{: .col-3}
+```go
+// Map
+ages := make(map[string]int)
+ages := map[string]int{
+    "alice":   31,
+    "charlie": 34,
+}
 ```
 
 
 ### Array > List
+{: .-row}
 
 ```ruby
 [1,2,3]
@@ -108,6 +154,7 @@ var a = [1,2,3]
 ## Control flow
 
 ### If...else
+{: .-row}
 
 ```ruby
 if true
@@ -136,6 +183,7 @@ if (true) {
 
 
 ### Loop
+{: .-row}
 
 ```ruby
 (0..10).each do |i|
@@ -180,6 +228,7 @@ for (let [k, v] of Object.entries(dict)) {
 ## Methods/Functions
 
 ### puts
+{: .-row}
 
 ```ruby
 puts 's'
@@ -194,6 +243,7 @@ console.log('s')
 ```
 
 ### sort
+{: .-row}
 
 ```ruby
 [3,2,1].sort => [1,2,3]
@@ -217,6 +267,7 @@ arr.sort()
 
 
 ### custom sort
+{: .-row}
 
 ```ruby
 [['a', 7], ['b', 2]].sort_by { |k, v| v }  => [["b", 2], ["a", 7]]
@@ -230,6 +281,7 @@ arr.sort()
 ```
 
 ### shift/unshift/pop/push
+{: .-row}
 
 ```ruby
 arr = []        # => []
@@ -249,6 +301,7 @@ arr.pop()       # => 1
 
 
 ### regex
+{: .-row}
 
 ```ruby
 '13243432432'.scan(/\d/) => ["1", "3", "2", "4", "3", "4", "3", "2", "4", "3", "2"]
@@ -269,6 +322,7 @@ m.group(2) # => '2c3'
 ```
 
 ### find
+{: .-row}
 
 ```ruby
 lst.find { |e| e == i }
@@ -279,6 +333,7 @@ next(x for x in seq if predicate(x))
 ```
 
 ### concat two arrays
+{: .-row}
 
 ```ruby
 [1,2,3] + [4, 5, 6]
@@ -298,6 +353,7 @@ a //[1,2,3,4,5,6]
 ```
 
 ### id
+{: .-row}
 
 ```ruby
 a.object_id
@@ -308,6 +364,7 @@ id(a)
 ```
 
 ### class
+{: .-row}
 
 ```ruby
 'str'.class
@@ -325,6 +382,7 @@ a.__prop__.constructor
 详见[继承关系]({% post_url 2020-12-04-es6中的继承和mixin %})
 
 ### uniq
+{: .-row}
 
 ```ruby
 [1,1,1].uniq => [1]
@@ -335,6 +393,7 @@ list(set([1,1,1]))
 ```
 
 ### map
+{: .-row}
 
 ```ruby
 [1,2,3].map { |e| e * 3 }
@@ -346,6 +405,7 @@ list(map(lambda x: x * 3, [1,2,3]))
 ```
 
 ### select > filter
+{: .-row}
 
 ```ruby
 (-5..5).select { |x| x < 0 }
@@ -357,6 +417,7 @@ less_than_zero = list(filter(lambda x: x < 0, range(-5, 5)))
 ```
 
 ### reduce
+{: .-row}
 
 ```ruby
 [1,2,3].reduce(0) { |sum, x| sum + x }
@@ -368,6 +429,7 @@ reduce(lambda sum, x: sum + x, [1,2,3], 0)
 ```
 
 ### any?
+{: .-row}
 
 ```ruby
 [1,2,3].any? { |e| e > 1 } => true
@@ -378,6 +440,7 @@ any(x > 3 for x in [1,2,3]) # False
 ```
 
 ### merge
+{: .-row}
 
 ```ruby
 a = {name: 'phx', age: 12}
@@ -403,6 +466,7 @@ var b = Object.assign(a, { b: 2 })
 ```
 
 ### group_by > Counter
+{: .-row}
 
 ```ruby
 [1,2,3,4,5,6,7,1,3].group_by {|e| e}.map { |k, v| [k, v.size]}.to_h
@@ -449,6 +513,7 @@ self.send(k)
 ## Others
 
 ### List all small characters
+{: .-row}
 
 ```ruby
 ('a'..'z').to_a
@@ -460,6 +525,7 @@ ALPHABET = list(ascii_lowercase)
 ```
 
 ### concat list
+{: .-row}
 
 ```ruby
 [1,2,3].join('')
@@ -470,6 +536,7 @@ ALPHABET = list(ascii_lowercase)
 ```
 
 ### Convert number to binary
+{: .-row}
 
 ```ruby
 7.to_s(2)
@@ -481,6 +548,7 @@ ALPHABET = list(ascii_lowercase)
 ```
 
 ### Convert binary to number
+{: .-row}
 
 ```ruby
 '101'.to_i(2)
@@ -492,6 +560,7 @@ int('101', 2)
 
 
 ### transalate
+{: .-row}
 
 ```ruby
 "hello".tr('el', 'ip')      #=> "hippo"
@@ -507,6 +576,7 @@ TRANSLATION_TABLE = str.maketrans(''.join(ALPHABETS), ''.join(reversed(ALPHABETS
 
 
 ### permutations
+{: .-row}
 
 ```ruby
 (1..3).to_a.permutation(2).to_a
@@ -519,6 +589,7 @@ TRANSLATION_TABLE = str.maketrans(''.join(ALPHABETS), ''.join(reversed(ALPHABETS
 ```
 
 ### zip
+{: .-row}
 
 ```ruby
 a = [ 4, 5, 6 ]
@@ -552,6 +623,7 @@ print (mapped)
 
 
 ### unzip
+{: .-row}
 
 
 ```python
@@ -567,6 +639,7 @@ print (namz)
 
 
 ### sleep
+{: .-row}
 
 ```javascript
 function sleep(ms) {
@@ -581,6 +654,7 @@ sleep(2000).then(() => { console.log("World!"); });
 
 
 ### Not supporting method chaining
+{: .-row}
 
 I have a string and need to convert it to ascii codes. That should be done via `map`. Later, I want to sum the values, thing will be different in `ruby` and `python`.
 
@@ -595,4 +669,6 @@ sum(map(lambda x: ord(x), list('abcd')))
 In above example, you could achieve the purpose by simply add `.method` to convert the previous result into a new format in `ruby`. However, you need to wrap another function like `sum()` to achieve this. IMHO, this is not easy for human reading. You need to figure out the flow from inside to outside, that's `list` > `map` > `sum`.
 
 ### Return data
+{: .-row}
+
 By default, `python` return `None` unless you specify the return value. `ruby` will return the last value of the method. A simple example is `sort()` returns `None`, while `.sort` returns sorted array/list.
