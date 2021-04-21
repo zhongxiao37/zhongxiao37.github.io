@@ -15,7 +15,6 @@ function parseRowNodes() {
       }  
     }
 
-    console.log(tempSiblingNodes);
     let row = document.createElement('div')
     row.classList.add('row');
     for (let n of tempSiblingNodes){
@@ -24,6 +23,5 @@ function parseRowNodes() {
     i.parentElement.insertBefore(row, i.nextElementSibling);
   }
 }
-
 
 document.addEventListener('DOMContentLoaded', parseRowNodes(), false);
