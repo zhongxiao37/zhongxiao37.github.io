@@ -5,7 +5,7 @@ date: 2021-04-26 16:00 +0800
 categories: mysql
 ---
 
-最近几天发现bitbucket上面的pipeline失败了,后来发现是因为上周JDK 8升级到292,禁用了TLS 1.0 和 TLS 1.1. 将pipeline的版本强制回滚到openjdk:8u282-jdk以后,暂时可以用了. 进而引出一些关于MYSQL SSL的问题.
+最近几天发现bitbucket上面的pipeline失败了,后来发现是因为上周JDK 8升级到292,禁用了TLSv1.0 和 TLSv1.1. 将pipeline的版本强制回滚到openjdk:8u282-jdk以后,暂时可以用了. 进而引出一些关于MYSQL SSL的问题.
 
 一般SSL的常规方法都需要安全证书,即服务器和客户端都需要证书,才可以加密. 但自己在尝试的时候,发现情况不是这样的,默认的MYSQL也可以通过SSL和非SSL连接。
 
@@ -72,3 +72,11 @@ SELECT sbt.variable_value AS tls_version,  t2.variable_value AS cipher,
        JOIN performance_schema.status_by_thread AS t2 ON t2.thread_id = t.thread_id 
       WHERE sbt.variable_name = 'Ssl_version' and t2.variable_name = 'Ssl_cipher' ORDER BY tls_version;
 ```
+
+### 回到最开始的问题
+
+既然[JDK8U291][2]明确要禁用TLSv1.0和TLSv1.1，那么就要两个选择，一个就是不用SSL，那么就可以用`sslMode=DISABLED`或者`useSSL=false`。另外一个就是继续用SSL，但是明确使用TLSv1.2，比如`enabledTLSProtocols=TLSv1.2`。
+
+
+[1]: https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-connp-props-security.html
+[2]: https://www.oracle.com/java/technologies/javase/8u291-relnotes.html
