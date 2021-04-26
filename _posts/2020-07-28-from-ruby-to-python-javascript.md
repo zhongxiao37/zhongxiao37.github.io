@@ -57,7 +57,7 @@ categories: ruby python javascript golang
 # From Ruby To Python, Javascript, Go
 {: .-row}
 
-{: .col-3.secondary}
+{: .col-3}
 ## Ruby
 
 {: .col-3}
@@ -68,6 +68,30 @@ categories: ruby python javascript golang
 
 {: .col-3}
 ## Go
+
+## 概述
+{: .-row}
+
+{: .col-3}
+```
+Ruby
+```
+
+{: .col-3}
+```
+Python
+```
+
+{: .col-3}
+```
+Javascript
+```
+
+{: .col-3}
+```
+Go
+```
+
 
 
 ## Data types
@@ -123,7 +147,7 @@ false
 {: .col-3}
 ```go
 // Map
-ages := make(map[string]int)
+ages := make(map[string]int) // 不能够初始化为nil，否则不能够赋值了
 ages := map[string]int{
     "alice":   31,
     "charlie": 34,
@@ -357,6 +381,158 @@ for i, v := range arr {
 
 
 ## Methods/Functions
+
+### in general
+{: .-row}
+
+{: .col-3}
+```ruby
+# 在Ruby里面，函数和方法一般是同一个东西。
+# 在英语里面，Function是独立的，可以调用的。Method是在类里面定义的函数，需要通过实例才可以调用它。
+
+# 函数不是第一公民
+# 这就意味着你不能够把函数赋值给变量，当作参数传入或者返回。
+# 虽然可以通过symbol，或者lambda的方式来实现，但是总觉得是剑走偏锋了，一般都不这么用
+
+```
+
+{: .col-3}
+```python
+# 函数是第一公民
+# 在Python里面最典型的例子就是装饰器。装饰器其实就是把被修饰的函数B当做参数传入装饰器函数A，然后在返回一个新的函数C。
+# 这样在执行函数B的时候，实际上是执行函数C，所以你可以在C里面定义额外的操作，比如给方法计时
+# 你还可以嵌套多次装饰器，实现参数化的装饰器
+
+```
+
+{: .col-3}
+```javascript
+// 一般没有提第一公民这事，但是的确存在
+// 最显然的例子就是函数定义有两种方式，一种是函数声明，另外一种就是函数表达式
+
+```
+
+{: .col-3}
+```go
+// 函数是第一公民
+// 这就意味着函数可以当做值一样地处理
+// 可以当作参数传入其他函数，也可以赋值给变量
+// 甚至可以把一个实例的方法绑定给某个变量，调用这个变量其实就是调用这个实例的方法
+
+
+p := Point{1, 2}
+q := Point{4, 6}
+
+distanceFromP := p.Distance        // method value
+fmt.Println(distanceFromP(q))      // "5"
+
+// 如果你是绑定struct里面的方法，那就需要第一个参数需要指定receiver
+// 就像Python里面定义方法的时候，第一个参数是`self`或者`cls`
+
+distance := Point.Distance   // method expression
+fmt.Println(distance(p, q))  // "5"
+
+
+
+
+```
+
+### 类方法
+{: .-row}
+
+{: .col-3}
+```ruby
+# 如果理解透，其实每个类是Class的一个实例
+
+class A
+end
+a = A.new # <A:0x00007fb508870018>
+a.class # A
+A.class # Class
+
+# 所以，所谓的类方法，实际上其实也是实例（Class的一个实例A）方法
+
+# 定义类方法，有好几种方法
+class A
+  def self.m1
+    puts 'm1'
+  end
+
+  class << self
+    def m2
+      puts 'm2'
+    end
+  end
+
+end
+
+A.instance_eval do
+  def m3
+    puts 'm3'
+  end
+end
+
+module M4
+  def m4
+    puts 'm4'
+  end
+end
+
+# A.extend M4
+
+# 或者像下面那样，记住隐式的self
+class A
+  extend M4
+end
+
+# 调用的时候直接A.m1就行了
+# 记住，A其实也是一个实例
+```
+
+{: .col-3}
+```python
+
+```
+
+{: .col-3}
+```javascript
+
+```
+
+{: .col-3}
+```go
+
+
+```
+
+### 动态方法
+{: .-row}
+
+{: .col-3}
+```ruby
+# method_missing
+# define_method
+# include / included
+# prepend / prepended
+# extend / extended
+
+```
+
+{: .col-3}
+```python
+
+```
+
+{: .col-3}
+```javascript
+
+```
+
+{: .col-3}
+```go
+
+
+```
 
 ### puts
 {: .-row}
@@ -846,6 +1022,31 @@ import collections
 dict(collections.Counter([1,2,3,4,5,6,7,1,3]))
 
 ```
+
+### with
+
+
+## Interface
+{: .-row}
+
+{: .col-3}
+```
+```
+
+{: .col-3}
+```
+```
+
+{: .col-3}
+```
+```
+
+{: .col-3}
+```go
+// 接口类型 抽象的类型。对应到Python的ABCMeta和@abstractmethod。不会暴露对象内部值的结构，只会暴露自己的方法。
+```
+
+
 
 
 ## Exception Handle
