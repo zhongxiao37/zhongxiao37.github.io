@@ -10,7 +10,7 @@ function parseRowNodes() {
       if (tempNode.classList.contains('-row')){
         break;
       }
-      if (tempNode.classList.contains('col-3')){
+      if ([].some.call(tempNode.classList, c => /col-.*/.test(c))){
         tempSiblingNodes.push(tempNode);
       }  
     }
