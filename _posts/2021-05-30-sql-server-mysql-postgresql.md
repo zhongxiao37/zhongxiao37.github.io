@@ -77,6 +77,62 @@ CREATE TABLE new_table_name (
 );
 ```
 
+### Table size
+{: .-row}
+
+{: .col-4}
+```
+```
+
+{: .col-4}
+```
+```
+
+{: .col-4}
+```sql
+DROP TABLE IF EXISTS table_seq;
+ 
+CREATE TEMP TABLE table_seq(
+                table_name VARCHAR(100),
+                column_default VARCHAR(100),
+                table_rows INT,
+                max_id INT
+);
+ 
+
+INSERT INTO table_seq(table_name)
+SELECT 'salesforce.' || t.table_name
+FROM information_schema."tables" t
+WHERE t.table_schema = 'salesforce';
+
+ 
+DO
+$$
+DECLARE
+    tbl   regclass;
+    nbrow bigint;
+    mid bigint;
+BEGIN
+   FOR tbl IN
+      SELECT table_name
+      FROM   table_seq
+   LOOP
+      EXECUTE 'SELECT count(1) FROM ' || tbl INTO nbrow;
+
+      raise notice '%: %', tbl, nbrow;
+
+      EXECUTE 'UPDATE table_seq SET table_rows = ' || nbrow || ' WHERE table_name = ''' || tbl || ''';';
+      IF mid > 0 THEN
+          EXECUTE 'UPDATE table_seq SET max_id = ' || mid || ' WHERE table_name = ''' || tbl || ''';';
+      END IF;
+   END LOOP;
+END
+$$;
+ 
+select * from table_seq;
+```
+
+
 
 ### Index
 {: .-row}
