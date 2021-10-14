@@ -41,4 +41,4 @@ select * from foo;
 select LAST_VALUE from public.foo_id_seq;
 ```
 
-执行到这里，就可以看到，LAST_VALUE不再是2了，虽然什么都没有插入进去。
+执行到这里，就可以看到，LAST_VALUE不再是2了，虽然什么都没有插入进去。这样就导致了主键的ID不再是连续的了。
