@@ -142,6 +142,9 @@ false
 ```javascript
 // Object
 {'a': 1, 'b': 2, 'c': 3}
+
+// ES6 Map
+const mapper = new Map([['1', 'a'], ['2', 'b']]);
 ```
 
 {: .col-3}
@@ -496,7 +499,55 @@ end
 
 {: .col-3}
 ```javascript
+class Robot {
+  name: string;
+  static availableNames: string[];
 
+  constructor() {
+    this.name = Robot.generateName();
+  }
+
+  public resetName(): void {
+    this.name = Robot.generateName();
+  }
+
+  public static releaseNames(): void {
+    Robot.availableNames = [];
+  }
+
+  public static generateName(): string {
+    if (
+      Robot.availableNames === undefined ||
+      Robot.availableNames.length === 0
+    ) {
+      Robot.availableNames = [];
+      let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+      let numbers = "0123456789".split("");
+      for (const a of letters) {
+        for (const b of letters) {
+          for (const x of numbers) {
+            for (const y of numbers) {
+              for (const z of numbers) {
+                Robot.availableNames.push([a, b, x, y, z].join(""));
+              }
+            }
+          }
+        }
+      }
+      // shuffle the array list
+      for (let i = Robot.availableNames.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [Robot.availableNames[i], Robot.availableNames[j]] = [
+          Robot.availableNames[j],
+          Robot.availableNames[i],
+        ];
+      }
+    }
+
+    return Robot.availableNames.pop() as string;
+  }
+}
+// https://googlechrome.github.io/samples/classes-es6/
 ```
 
 {: .col-3}
@@ -804,7 +855,9 @@ m.group(2) # => '2c3'
 
 {: .col-3}
 ```javascript
-
+const regex = /[a-zA-Z]/g;
+const matched_chars = 'abcdefg'.match(regex);
+// ['a', 'b', 'c', 'd', 'e', 'f', 'g']
 ```
 
 {: .col-3}
@@ -824,6 +877,14 @@ lst.find { |e| e == i }
 ```python
 next(x for x in seq if predicate(x))
 ```
+
+{: .col-3}
+```javascript
+const array1 = [5, 12, 8, 130, 44];
+const found = array1.find(element => element > 10);
+// 12
+```
+
 
 ### concat two arrays
 {: .-row}
@@ -916,7 +977,10 @@ list(set([1,1,1]))
 ```
 
 {: .col-3}
-```
+```javascript
+let arr = [1,2,3,1,2,3]
+[...new Set(arr)]
+// [1, 2, 3]
 ```
 
 {: .col-3}
@@ -938,6 +1002,11 @@ list(map(lambda x: x * 3, [1,2,3]))
 [i * 3 for i in [1,2,3]]
 ```
 
+{: .col-3}
+```javascript
+[1,2,3,4,5].map( x => x * 2);
+```
+
 ### select > filter
 {: .-row}
 
@@ -951,6 +1020,13 @@ list(map(lambda x: x * 3, [1,2,3]))
 less_than_zero = list(filter(lambda x: x < 0, range(-5, 5)))
 [e for e in range(-5, 5) if e < 0]
 ```
+
+{: .col-3}
+```javascript
+Array.from({length: 5}, (v, i) => i).filter( x => x % 2 === 0);
+// [0, 2, 4]
+```
+
 
 ### reduce
 {: .-row}
@@ -966,6 +1042,32 @@ from functools import reduce
 reduce(lambda sum, x: sum + x, [1,2,3], 0)
 ```
 
+{: .col-3}
+```javascript
+const array1 = [1, 2, 3, 4];
+array1.reduce((sum, x) => sum + x);
+```
+
+
+### all
+{: .-row}
+
+{: .col-3}
+```ruby
+[1,2,3].all { |e| e.even? }
+```
+
+{: .col-3}
+```python
+all(len(g) % 2 == 0 for g in groups)
+```
+
+{: .col-3}
+```javascript
+[2,4,6].every( x => x % 2 === 0)
+```
+
+
 ### any?
 {: .-row}
 
@@ -977,6 +1079,11 @@ reduce(lambda sum, x: sum + x, [1,2,3], 0)
 {: .col-3}
 ```python
 any(x > 3 for x in [1,2,3]) # False
+```
+
+{: .col-3}
+```javascript
+[2,4,6].some( x => x % 2 === 0)
 ```
 
 ### merge
@@ -1022,6 +1129,56 @@ import collections
 dict(collections.Counter([1,2,3,4,5,6,7,1,3]))
 
 ```
+
+{: .col-3}
+```javascript
+[1,2,3,4,5,6,7,1,3].reduce((acc, x) => {
+    if (!acc[x]) acc[x] = 0;
+    acc[x] += 1;
+    return acc;
+}, {});
+```
+
+### range
+{: .-row}
+
+{: .col-3}
+```ruby
+(1..5).to_a
+```
+
+{: .col-3}
+```python
+list(range(10))
+# [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+list(range(1, 10))
+# [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+{: .col-3}
+```javascript
+Array.from({length: 5}, (v, i) => i);
+// [0, 1, 2, 3, 4]
+```
+
+### chars
+{: .-row}
+
+{: .col-3}
+```ruby
+'foo'.chars
+```
+
+{: .col-3}
+```python
+[char for char in 'foo']
+```
+
+{: .col-3}
+```javascript
+Array.from('foo')
+```
+
 
 ### with
 
@@ -1112,6 +1269,11 @@ ALPHABET = list(ascii_lowercase)
 ''.join([1,2,3])
 ```
 
+{: .col-3}
+```javascript
+[1,2,3].join('')
+```
+
 ### Convert number to binary
 {: .-row}
 
@@ -1123,6 +1285,11 @@ ALPHABET = list(ascii_lowercase)
 {: .col-3}
 ```python
 "{0:b}".format(7 % 256)
+```
+
+{: .col-3}
+```javascript
+10..toString(2)
 ```
 
 ### Convert binary to number
@@ -1137,6 +1304,12 @@ ALPHABET = list(ascii_lowercase)
 ```python
 int('101', 2)
 ```
+
+{: .col-3}
+```javascript
+parseInt('101', 2)
+```
+
 
 ### transalate
 {: .-row}
@@ -1230,11 +1403,14 @@ print (namz)
 {: .-row}
 
 {: .col-3}
-```
+```ruby
+sleep 1
 ```
 
 {: .col-3}
-```
+```javascript
+import time
+time.sleep(2)
 ```
 
 {: .col-3}
