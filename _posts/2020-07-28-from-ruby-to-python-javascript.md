@@ -1426,6 +1426,98 @@ sleep(2000).then(() => { console.log("World!"); });
 
 
 
+### format
+{: .-row}
+
+{: .col-3}
+```ruby
+"%02d:%02d" % exact_time
+format("%02d", 7) #有点不像ruby代码耶
+```
+
+```python
+'{:02d}:{:02d}'.format(7, 8)
+```
+
+```javascript
+```
+
+```go
+```
+
+### delete
+{: .-row}
+
+{: .col-3}
+```ruby
+```
+
+{: .col-3}
+```python
+'{:02d}:{:02d}'.format(7, 8)
+```
+
+{: .col-3}
+```javascript
+```
+
+{: .col-3}
+```go
+```
+
+### replace
+{: .-row}
+
+{: .col-3}
+```ruby
+```
+
+{: .col-3}
+```python
+'{:02d}:{:02d}'.format(7, 8)
+```
+
+{: .col-3}
+```javascript
+```
+
+{: .col-3}
+```go
+```
+
+
+
+
+
+
+
+
+
+
+
+### template
+{: .-row}
+
+{: .col-3}
+```ruby
+```
+
+{: .col-3}
+```python
+'{:02d}:{:02d}'.format(7, 8)
+```
+
+{: .col-3}
+```javascript
+```
+
+{: .col-3}
+```go
+```
+
+
+
+
 ### Not supporting method chaining
 {: .-row}
 
