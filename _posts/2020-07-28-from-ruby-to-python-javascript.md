@@ -93,6 +93,36 @@ Go
 ```
 
 
+## Version manager
+{: .-row}
+
+{: .col-3}
+```bash
+brew install rbenv
+rbenv versions
+rbenv use 2.7.2
+```
+
+{: .col-3}
+```bash
+brew install pyenv
+pyenv versions
+pyenv global
+pyenv local
+```
+
+{: .col-3}
+```bash
+yarn global add n
+n
+```
+
+{: .col-3}
+```go
+```
+
+
+
 
 ## Data types
 
