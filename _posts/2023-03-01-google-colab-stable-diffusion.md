@@ -26,3 +26,7 @@ categories: machine_learning aigc
 ## 只是尝试
 
 如果只是尝试一下，可以访问[Demo](https://huggingface.co/spaces/stabilityai/stable-diffusion)来尝试。
+
+## 本地搭建
+
+本地可以用[开源项目](https://github.com/AUTOMATIC1111/stable-diffusion-webui), 就可以搭建一个Stable Diffusion Web UI。但是最好你有一个显卡，否则会很慢很卡。对于苹果用户，可以按照[文档](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Installation-on-Apple-Silicon)搭建环境。
