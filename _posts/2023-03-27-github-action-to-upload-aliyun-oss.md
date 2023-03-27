@@ -18,24 +18,27 @@ on:
       - main
 
 jobs:
-  upload-to-oss:
+  upload-to-aliyun-oss:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install AWS CLI
-      run: |
-        sudo apt-get update
-        sudo curl https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz -o aliyun-cli-linux-3.0.16-amd64.tgz
-        sudo tar xzvf aliyun-cli-linux-3.0.16-amd64.tgz
-        sudo cp aliyun /usr/local/bin
-        
-    - name: Upload to S3
-      env:
-        ACCESS_KEY_ID: ${{ secrets.ALI_ACCESS_KEY_ID }}
-        SECRET_ACCESS_KEY: ${{ secrets.ALI_SECRET_ACCESS_KEY }}
-        REGION: cn-beijing
-      run: |
-        aliyun oss cp ./{your_folder}/ oss://{bucket} -r -f
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt install -y curl
+          sudo curl https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz -o aliyun-cli-linux-3.0.16-amd64.tgz
+          sudo tar xzvf aliyun-cli-linux-3.0.16-amd64.tgz
+          sudo cp aliyun /usr/local/bin
+          aliyun version
+
+      - name: Upload to Aliyun OSS
+        env:
+          ACCESS_KEY_ID: ${{ secrets.ALI_ACCESS_KEY_ID }}
+          SECRET_ACCESS_KEY: ${{ secrets.ALI_SECRET_ACCESS_KEY }}
+          REGION: cn-beijing
+        run: |
+          aliyun configure set --profile default --mode AK --region=cn-beijing --access-key-id=$ACCESS_KEY_ID --access-key-secret=$SECRET_ACCESS_KEY
+          aliyun oss cp ./{your_folder}/ oss://{bucket} -r -f
 ```
