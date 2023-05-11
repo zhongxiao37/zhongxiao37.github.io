@@ -357,3 +357,10 @@ with DAG(
     splited_data_set_paths = splitor(data_source_path)
 
 ```
+
+
+### 本地起Sagemaker
+
+将`sagemaker_session=sagemaker.Session(boto3.session.Session())`换成的`LocalSession`就可以了。
+
+
