@@ -5,7 +5,7 @@ date: 2023-07-06 09:58 +0800
 categories: postgres
 ---
 
-Postgres有Physical replication和Logical replication。Logical replication有个好处就是可以很直观地看到已经提交的COMMIT。
+Postgres有Physical replication和Logical replication。Logical replication有个好处就是可以很直观地看到已经提交的SQL语句，用来实现CDC(Change Data Capture)。
 
 
 测试脚本
