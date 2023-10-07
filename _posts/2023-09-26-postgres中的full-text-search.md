@@ -5,11 +5,11 @@ date: 2023-09-26 13:30 +0800
 categories: postgres
 ---
 
-文章源于 https://xata.io/blog/postgres-full-text-search-engine(https://xata.io/blog/postgres-full-text-search-engine)
+文章源于 [https://xata.io/blog/postgres-full-text-search-engine](https://xata.io/blog/postgres-full-text-search-engine)
 
 ## 下载数据文件
 
-https://www.kaggle.com/datasets/jrobischon/wikipedia-movie-plots(https://www.kaggle.com/datasets/jrobischon/wikipedia-movie-plots)
+[https://www.kaggle.com/datasets/jrobischon/wikipedia-movie-plots](https://www.kaggle.com/datasets/jrobischon/wikipedia-movie-plots)
 
 ## 创建表
 
