@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Debug Rails in VS Code
+title: Debug Rails in VS Code (Ruby 3)
 date: 2023-10-07 16:53 +0800
 categories: rails
 ---
