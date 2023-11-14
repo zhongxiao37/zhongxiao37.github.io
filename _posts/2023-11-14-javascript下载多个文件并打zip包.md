@@ -87,3 +87,7 @@ zip.generateAsync({ type: "blob" }).then((zipFile) => {
     });
   }
 ```
+
+## Reference
+
+1. [https://huynvk.dev/blog/download-files-and-zip-them-in-your-browsers-using-javascript](https://huynvk.dev/blog/download-files-and-zip-them-in-your-browsers-using-javascript)
