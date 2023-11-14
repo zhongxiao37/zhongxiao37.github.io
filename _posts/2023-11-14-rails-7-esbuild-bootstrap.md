@@ -5,6 +5,8 @@ date: 2023-11-14 16:24 +0800
 categories: rails esbuild boostrap
 ---
 
+创建一个新项目
+
 ```bash
 rails new myblog
 ```
