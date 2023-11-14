@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title: Rails 7 + esbuild + BootStrap
 date: 2023-11-14 16:24 +0800
 categories: rails esbuild boostrap
