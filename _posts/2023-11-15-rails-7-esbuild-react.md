@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Rails 7 + esbuild + React
-date: 2023-11-15 17:15 +0800
+date: 2023-11-15 08:15 +0800
 categories: rails react
 ---
 
