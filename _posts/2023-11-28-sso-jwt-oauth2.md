@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Who am I?
+title: SSO、JWT和Oauth2
 date: 2023-11-28 22:52 +0800
 categories: jwt sso oauth
 ---
