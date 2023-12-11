@@ -7,6 +7,8 @@ categories: terraform
 
 目标是，在两个 VPC 上搭建两个 EC2，然后通过 TGW 将两个 VPC 打通。
 
+![transit-gateway-overview.png](/images/transit-gateway-overview.png)
+
 ## 构建 ec2 module
 
 首先创建`modules/ec2/main.tf`文件，分别通过参数创建 VPC，并允许 SSH 和 ICMP 协议。再在 VPC 上起一个 EC2。
@@ -239,3 +241,7 @@ module "tgwa-2" {
 }
 
 ```
+
+## Reference
+
+[https://docs.aws.amazon.com/zh_cn/vpc/latest/tgw/how-transit-gateways-work.html](https://docs.aws.amazon.com/zh_cn/vpc/latest/tgw/how-transit-gateways-work.html)
