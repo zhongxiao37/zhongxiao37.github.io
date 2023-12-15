@@ -11,7 +11,12 @@ categories: kubernets
 
 首先起 3 台 EC2，如下图所示。
 
-![aws_ec2](/images/AWS_k8s.png)
+1. 新建一个 VPC。
+2. 两个子网，public 子网连接 IGW，可以访问互联网，private 子网可以通过 NAT 访问互联网。
+3. 开启 ssh，加上 keypair，master 节点还兼职堡垒机。
+4. 可以临时把私钥放到堡垒机上，做完最后操作之后删掉即可。
+
+<img src="/images/AWS_k8s.png" width="800" />
 
 ```terraform
 terraform {
@@ -102,7 +107,7 @@ resource "aws_vpc_security_group_ingress_rule" "icmp" {
 resource "aws_vpc_security_group_ingress_rule" "ssh" {
   security_group_id = aws_vpc.vpc_ics_ml.default_security_group_id
   ip_protocol = "tcp"
-  cidr_ipv4 = "175.152.124.66/32"
+  cidr_ipv4 = "0.0.0.0/0" # 换成你的电脑的公网IP，避免当个肉鸡
   from_port = 22
   to_port = 22
 }
@@ -146,6 +151,10 @@ resource "aws_instance" "node" {
 ## 搭建 k8s
 
 本文是按照[B 站视频](https://www.bilibili.com/video/BV1ou4y1a7LR/)搭建的，文字版可以看[文章](https://learn-k8s-from-scratch.readthedocs.io/en/latest/k8s-install/kubeadm-cn.html#fix-node-internal-ip-issue)。虽然说已经有了文章了，但是里面还是有些小坑需要注意。
+
+### 安装 kubeadm kubelet
+
+按照文章安装 kubeadm kubelet containerd kubectl。
 
 ### enp0s8 网卡
 
