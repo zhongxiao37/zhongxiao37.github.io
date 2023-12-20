@@ -360,8 +360,8 @@ spec:
 现在就可以修改 scheduler 的 Deployment 文件
 
 1. 指定运行的`serviceAccountName: airflow-scheduler`
-2. 修改 AIRFLOW**CORE**EXECUTOR 为 `KubernetesExecutor`
-3. 新增 AIRFLOW**KUBERNETES_EXECUTOR**NAMESPACE 为`airflow`
+2. 修改 `AIRFLOW__CORE__EXECUTOR` 为 `KubernetesExecutor`
+3. 新增 `AIRFLOW__KUBERNETES_EXECUTOR__NAMESPACE` 为`airflow`
 4. 指定 Pod 模版文件 `AIRFLOW__KUBERNETES__POD_TEMPLATE_FILE`
 
 ```yaml
@@ -440,3 +440,9 @@ spec:
 ## 最后
 
 我没有配置域名和 Ingress，需要自己把 webserver 的端口 forward 出来，比如`k port-forward airflow-webserver-697b67bcb5-dv5bt -n airflow 8080:8080`。测试下来，原来可能需要 8 秒的任务，现在要一分钟才跑得完，中间很多时间都是在拉起 Pod 上了。
+
+## Reference
+
+1. [https://www.clearpeaks.com/deploying-apache-airflow-on-a-kubernetes-cluster/](https://www.clearpeaks.com/deploying-apache-airflow-on-a-kubernetes-cluster/)
+2. [https://www.clearpeaks.com/running-apache-airflow-workflows-on-a-kubernetes-cluster/](https://www.clearpeaks.com/running-apache-airflow-workflows-on-a-kubernetes-cluster/)
+3. [https://maples7.com/2019/12/03/develop-etl-via-airflow-on-k8s/](https://maples7.com/2019/12/03/develop-etl-via-airflow-on-k8s/)
