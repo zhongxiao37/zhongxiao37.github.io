@@ -2,7 +2,7 @@
 layout: default
 title: 通过kubeadm搭建kubernetes
 date: 2023-12-15 17:52 +0800
-categories: kubernets
+categories: kubernetes
 ---
 
 最近在《深入剖析 Kubernetes》，顺手搭建一个 K8S。
