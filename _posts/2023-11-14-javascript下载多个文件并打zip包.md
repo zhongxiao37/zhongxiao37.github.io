@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Javascript下载多个文件并打zip包
+title: "Front Engineering Workshop: Javascript下载多个文件并打zip包"
 date: 2023-11-14 15:38 +0800
 categories: javascript
 ---

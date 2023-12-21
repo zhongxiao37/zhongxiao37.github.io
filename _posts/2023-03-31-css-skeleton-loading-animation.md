@@ -1,12 +1,11 @@
 ---
 layout: default
-title: CSS skeleton loading animation
+title: "Front Engineering Workshop: CSS skeleton loading animation"
 date: 2023-03-31 10:46 +0800
 categories: css fe
 ---
 
-思路是，在元素的后面添加一个::after元素，这个元素添加线性渐变，然后在通过`keyframes`和`animation`做个动态移动。
-
+思路是，在元素的后面添加一个::after 元素，这个元素添加线性渐变，然后在通过`keyframes`和`animation`做个动态移动。
 
 ![img](/images/css_loading_animation.gif)
 
@@ -16,7 +15,7 @@ categories: css fe
   height: 1em;
   position: relative;
   overflow: hidden;
-  background-color: #DDDBDD;
+  background-color: #dddbdd;
 
   &::after {
     position: absolute;
@@ -33,7 +32,7 @@ categories: css fe
       rgba(#fff, 0)
     );
     animation: shimmer 2s infinite;
-    content: '';
+    content: "";
   }
 
   @keyframes shimmer {
@@ -59,7 +58,7 @@ categories: css fe
 
 .o-media {
   display: flex;
-  
+
   &__body {
     flex-grow: 1;
     margin-left: 1em;
@@ -70,7 +69,7 @@ categories: css fe
   > * + * {
     margin-top: 0.75em;
   }
-  
+
   &--l {
     > * + * {
       margin-top: 2em;
@@ -88,7 +87,7 @@ body {
   max-width: 42em;
   margin: 0 auto;
   padding: 3em 1em;
-  font-family: 'Karla', sans-serif;
+  font-family: "Karla", sans-serif;
   line-height: 1.4;
 }
 
@@ -105,7 +104,7 @@ main {
 
 header {
   h1 {
-    font-family: 'Rubik', sans-serif;
+    font-family: "Rubik", sans-serif;
     font-weight: 500;
     line-height: 1.2;
     font-size: 2em;
@@ -118,7 +117,6 @@ header {
   }
 }
 ```
-
 
 Reference:
 https://codepen.io/JCLee/pen/dyPejGV
