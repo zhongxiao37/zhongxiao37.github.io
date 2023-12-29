@@ -217,3 +217,7 @@ module "vsw" {
 ```
 
 而导入命令也就会变成 `terraform import "module.vsw[0].alicloud_vswitch.vswitch" vsw-2ze7o***********`。需要留意中间`module.vsw`后面的`[0]`编号。
+
+## Reference
+
+1. [https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/data-sources/security_group_rules](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/data-sources/security_group_rules)
