@@ -202,7 +202,7 @@ tfvar 文件里面定义两个交换机
 }
 ```
 
-`environments/dev/main.tf` 就可以通过 Terraform 的 meta argument 来实现循环。
+`environments/dev/main.tf` 就可以通过 Terraform 的 [meta argument](https://developer.hashicorp.com/terraform/language/meta-arguments/count) 来实现循环。
 
 ```tf
 module "vsw" {
