@@ -246,6 +246,8 @@ output "vpc_id" {
 
 <img src="/images/terraform_outputs.png" width="800px">
 
+通过 state 文件，可以从其他 Terraform 配置中获取到 outputs。但个人认为这样做的话，在新建环境的时候，还需要解决其他 Terraform 依赖的问题，而且这些依赖比较隐晦。
+
 ## 如何使用 data_source
 
 有时候，自己还没有完全把其他 Infra 转为 gitops，也可以通过`data_source`引用远端的资源，以后再逐步转换。
@@ -272,6 +274,8 @@ module "vsw" {
   ...
 }
 ```
+
+和 `terraform_remote_state`一样，在逐步转换的过程中可以这样做，但是新建环境的时候，可能会发现还缺失某些依赖。
 
 ## Reference
 
