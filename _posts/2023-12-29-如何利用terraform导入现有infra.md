@@ -15,9 +15,12 @@ categories: terraform
 
 ## 给用户赋予权限
 
-翻了[阿里云的官网](https://www.alibabacloud.com/help/zh/terraform/latest/install-and-configure-terraform-in-the-local-pc?spm=a2c63.p38356.0.0.61a02093HAB8wG)，也不告诉到底需要啥权限，暂时先给个 Admin 权限。
+暂时先给个 Admin 权限
 
 <img src="/images/alicloud_ram_permission.png" width="800px" >
+
+翻了[阿里云的官网](https://www.alibabacloud.com/help/zh/terraform/latest/install-and-configure-terraform-in-the-local-pc?spm=a2c63.p38356.0.0.61a02093HAB8wG)，也不告诉到底需要啥权限。
+
 <img src="/images/alicloud_ram_doc.png" width="800px">
 
 ## 安装 Terraform
@@ -217,6 +220,58 @@ module "vsw" {
 ```
 
 而导入命令也就会变成 `terraform import "module.vsw[0].alicloud_vswitch.vswitch" vsw-2ze7o***********`。需要留意中间`module.vsw`后面的`[0]`编号。
+
+## 如何使用 terraform_remote_state
+
+Terraform 还提供`terraform_remote_state`, 可以通过远端的 state 文件，获取 `outputs` 的 resource 信息。下面的例子就是从本地的`terraform.tfstate`文件中获取 `outputs` 是`vpc_id`的值。
+
+```tf
+data "terraform_remote_state" "vpc" {
+  backend = "local"
+}
+
+module "vsw" {
+  source       = "../modules/vswitch"
+  ...
+  # vpc_id       = module.vpc.vpc_id
+  vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
+  ...
+}
+output "vpc_id" {
+  value = module.vpc.vpc_id
+}
+```
+
+需要提前声明`output "vpc_id"`，并且`terraform plan`一次更新`state`文件。操作完之后，可以留意到`tfstate`文件内容多了`outputs`。
+
+<img src="/images/terraform_outputs.png" width="800px">
+
+## 如何使用 data_source
+
+有时候，自己还没有完全把其他 Infra 转为 gitops，也可以通过`data_source`引用远端的资源，以后再逐步转换。
+
+比如这里就是找到阿里云账号下名字是`pzhong-vpc-cnn2`的 VPC 资源。
+
+```tf
+
+data "alicloud_vpcs" "vpcs_ds" {
+  name_regex = "pzhong-vpc-cnn2"
+}
+
+```
+
+稍后，就可以通过`data.alicloud_vpcs.vpcs_ds.vpcs.0.vpc_id`取到这个资源的`vpc_id`了。[文档](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/data-sources/vpcs)
+
+```tf
+module "vsw" {
+  source       = "../modules/vswitch"
+  ...
+  # vpc_id       = module.vpc.vpc_id
+  # vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
+  vpc_id = data.alicloud_vpcs.vpcs_ds.vpcs.0.vpc_id
+  ...
+}
+```
 
 ## Reference
 
