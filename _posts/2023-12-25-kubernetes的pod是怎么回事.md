@@ -22,3 +22,7 @@ attach 是连接到 container 里面的主进程，而 exec 是可以指定任�
 ### Deployment yaml 里面哪些是 Pod 级别的属性，哪些是 Container 级别的属性
 
 网络，存储，安全，调度相关的，都是 Pod 级别的，因为它们都和'虚拟机'相关。
+
+### Kubernetes 是如何控制伸缩的
+
+Kubernetes 是通过 ReplicaSet API 来控制 Pod 的伸缩和滚动发布的。
