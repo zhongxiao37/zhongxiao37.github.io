@@ -1,11 +1,11 @@
 ---
 layout: default
-title: Kubernetes 99问
+title: N问Kubernetes
 date: 2023-12-25 22:06 +0800
 categories: kubernetes
 ---
 
-从问题的角度去理解 Kubernetes，我并没有列 99 个问题，只是想说，尽可能多地问
+从问题的角度去理解 Kubernetes
 
 ### Kubernetes 里面的 Pod 是如何通信的
 
