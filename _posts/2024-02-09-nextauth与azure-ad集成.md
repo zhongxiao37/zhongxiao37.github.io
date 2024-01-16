@@ -32,6 +32,16 @@ export default function RootLayout({
 }
 ```
 
+## 配置环境变量
+
+```bash
+AZURE_AD_CLIENT_ID=xxx-xxx-xxxx
+AZURE_AD_CLIENT_SECRET=xxx-xxx-xxxx
+AZURE_AD_TENANT_ID=xxx-xxx-xxxx
+NEXTAUTH_SECRET=xxx-xxx-xxxx
+NEXTAUTH_URL=http://localhost:3000
+```
+
 ## 创建 route.ts
 
 ```javascript
