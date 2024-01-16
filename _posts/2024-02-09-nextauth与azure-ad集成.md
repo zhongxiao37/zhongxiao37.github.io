@@ -105,3 +105,7 @@ const Page = () => {
 };
 export default Page;
 ```
+
+## Reference
+
+1. [https://next-auth.js.org/providers/azure-ad](https://next-auth.js.org/providers/azure-ad)
