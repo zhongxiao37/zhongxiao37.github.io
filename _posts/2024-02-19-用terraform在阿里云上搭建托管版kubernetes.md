@@ -11,6 +11,8 @@ categories: terraform aliyun kubernetes
 
 第一件事情肯定是指定 VPC 网段。
 
+<img src="/images/aliyun_vpc.png" width="800px">
+
 ```json
 // dev/terraform.tfvars.json
 "vpc": {
@@ -45,6 +47,8 @@ resource "alicloud_vpc" "vpc" {
 ## 交换机 VSW
 
 接下来是规划网段，将上面的 VPC 分割成几个网段，分别是数据库，负载均衡，k8s 和 pod 使用。其中 k8s 和 pod 要在相同的两个可用区。
+
+<img src="/images/aliyun_vsw.png" width="800px">
 
 ```json
 // dev/terraform.tfvars.json
@@ -106,6 +110,8 @@ resource "alicloud_vswitch" "vswitch" {
 ## NAT
 
 VPC 需要访问 Internet，所以需要一个 NAT，并绑定了 EIP 和交换机。这样，这些网段就可以访问 Internet 了。
+
+<img src="/images/aliyun_nat.png" width="800px">
 
 ```json
 // dev/terraform.tfvars.json
@@ -173,6 +179,8 @@ resource "alicloud_snat_entry" "snat-vsw" {
 
 安装组可以理解为防火墙，用来控制那些网络请求可以通过。比如，我这里创建了两个规则，允许 VPC 里面的所有 IP 和端口互通。另外一个规则就是允许通过 NAT 访问互联网。
 
+<img src="/images/aliyun_sg.png" width="800px">
+
 ```json
 // dev/terraform.tfvars.json
 "sgs": {
@@ -214,6 +222,12 @@ ACK 就比较简单了，把上面的交换机，安全组填进去，拉起 ACK
 当然，你也可以用 Terraform 的`data_source`查看支持的机型有哪些。
 
 最后测试了一下，拉起 ACK 大概要 5 分钟左右就可以了。想想自己搭建 Kubernetes 集群，不花个 2、3 个小时弄不完的。
+
+可以看见，背后 Terraform 自动拉起了两个 ECS 实例，机型为指定的实例类型。
+
+<img src="/images/aliyun_ack_nodes.png" width="800px">
+
+<img src="/images/aliyun_ack_nodepool.png" width="800px">
 
 ```json
 // dev/terraform.tfvars.json

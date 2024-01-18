@@ -19,7 +19,7 @@ volumeMounts:
 
 查看 scheduler pod 的日志，会看到下面的报错。查看代码，发现其实它实在尝试写入 log 而已。为啥写入 log 就卡住了呢？
 
-```txt
+```bash
 Traceback (most recent call last):
   File "/usr/local/lib/python3.9/logging/__init__.py", line 1087, in emit
     self.flush()
@@ -114,31 +114,31 @@ Airflow 支持[remote logging](https://airflow.apache.org/docs/apache-airflow/st
 1. 安装 alibaba provider `pip install apache-airflow-providers-alibaba`
 2. 创建 airflow connection `aliyun_oss_airflow_logging`
 
-```json
-{
-  "auth_type": "AK",
-  "access_key_id": "LTAIxxxxxxxxxx",
-  "access_key_secret": "",
-  "region": "cn-beijing-internal"
-}
-```
+   ```json
+   {
+     "auth_type": "AK",
+     "access_key_id": "LTAIxxxxxxxxxx",
+     "access_key_secret": "",
+     "region": "cn-beijing-internal"
+   }
+   ```
 
 3. 设置 Pod 的环境变量，开启 remote logging。参考[Airflow 官网](https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html)
 
-```yaml
-- name: AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID
-  value: aliyun_oss_airflow_logging
-- name: AIRFLOW__LOGGING__REMOTE_LOGGING
-  value: "True"
-- name: AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER
-  value: oss://ics-airflow-logs/logs
-```
+   ```yaml
+   - name: AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID
+     value: aliyun_oss_airflow_logging
+   - name: AIRFLOW__LOGGING__REMOTE_LOGGING
+     value: "True"
+   - name: AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER
+     value: oss://airflow-logs/logs
+   ```
 
 4. 更新 webserver 的 volumeMounts。webserver 这端，就可以通过挂载 PVC 的方式，读取到日志了。
 
-```yaml
-volumeMounts:
-  - mountPath: /opt/airflow/logs
-    name: volume-pv-airflow-logs
-    subPath: logs
-```
+   ```yaml
+   volumeMounts:
+     - mountPath: /opt/airflow/logs
+       name: volume-pv-airflow-logs
+       subPath: logs
+   ```

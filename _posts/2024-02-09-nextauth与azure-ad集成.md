@@ -13,7 +13,7 @@ categories: sso nextjs
 
 ## 引入 SessionProvider
 
-```javascript
+```js
 "use client";
 import { SessionProvider } from "next-auth/react";
 
@@ -32,7 +32,19 @@ export default function RootLayout({
 }
 ```
 
+## 在 Azure 上注册 application
+
+按照微软的[文档](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app)，注册一个 application，获取到`client_id`和`client_secret`。
+
+<img src="/images/azure_app_registration.png" width="800px">
+
+留意设置好 callback URL 如下。
+
+<img src="/images/azure_callback_url.png" width="800px">
+
 ## 配置环境变量
+
+创建`.env.local`文件，配置好环境变量
 
 ```bash
 AZURE_AD_CLIENT_ID=xxx-xxx-xxxx
