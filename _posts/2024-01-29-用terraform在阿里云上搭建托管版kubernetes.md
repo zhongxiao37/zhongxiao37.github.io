@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 用Terraform在阿里云上搭建托管版Kubernetes
-date: 2024-02-19 18:05 +0800
+date: 2024-01-29 18:05 +0800
 categories: terraform aliyun kubernetes
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 通过阿里云SSO获取的STS token的有效时间
-date: 2024-01-29 17:09 +0800
+date: 2024-02-19 17:09 +0800
 categories: aliyun sso
 ---
 

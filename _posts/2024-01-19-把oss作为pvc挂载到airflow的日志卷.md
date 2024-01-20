@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 把OSS作为PVC挂载到airflow的日志卷
-date: 2024-01-19 22:27 +0800
+date: 2024-01-19 12:27 +0800
 categories: airflow oss
 ---
 
