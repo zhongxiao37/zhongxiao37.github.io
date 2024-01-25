@@ -95,6 +95,41 @@ I0125 10:40:23.220001   20677 round_trippers.go:580]     Upgrade: SPDY/3.1
 
 SPDY 是一个被遗弃的协议，Kubernetes 团队在计划 1.30.0 版本中将 SPDY 升级为 websockets，[https://github.com/kubernetes/enhancements/issues/4006](https://github.com/kubernetes/enhancements/issues/4006)
 
+### Service Account Token
+
+按照 Kubernetes 的[官网](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#manually-create-an-api-token-for-a-serviceaccount)，我们可以创建自定义的 serviceaccount，并绑定指定的权限，就可以调 Kubernetes 的 API server 进行操作了。
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: build-robot
+EOF
+```
+
+可以通过`kubectl create token build-robot`获取一个短期的 Token，默认一个小时有效。
+
+```jwt
+eyJhbGciOiJSUzI1NiIsImtpZCI6Ild0UXhFelBad0VYa2F3N1VDU2hoSUI5bGpQOGdSTE9QZGZKMVFiZXprUmsifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjIl0sImV4cCI6MTcwNjE2MzA1MSwiaWF0IjoxNzA2MTU5NDUxLCJpc3MiOiJodHRwczovL2t1YmVybmV0ZXMuZGVmYXVsdC5zdmMiLCJrdWJlcm5ldGVzLmlvIjp7Im5hbWVzcGFjZSI6ImljcyIsInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJzYS1pY3MiLCJ1aWQiOiIyOGE1NGNmYS01MWM1LTQ5OWQtODVjZS0wZTczODJjZDliYzkifX0sIm5iZiI6MTcwNjE1OTQ1MSwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmljczpzYS1pY3MifQ.BWJqUF6sfK44HNtTY7M6tZYPHziEiADrVyk6b-XSHka8DdztM1-_6eQMmljFLiW2Dv0QWZMOMqMDNw1pFe-QGjh6KphcpBq1eJfv8rcpKU3blBE3f0NusxhgSScWXIkju_BmSA0j82OSprLmpbrAXmtocgV1LEhF4hrrbPz_FErqva6yTaUp1lbiFZ5x7CLzvmdZKqnI6rzzjyBcUalXhRAot26qNmKaFsWAI4mi5h5uvOiyaSe6l-kNRqhoLKueQzINF963IJenzy62Xmr-4e4BxbGX5tm2fNj6gtDJMCaCWiq-NNW_rMSrNjDqJSmE9krCCILThd39t2jk6zxviw
+```
+
+你也可以通过创建 Secret 的方式，创建一个长期有效的 token。ArgoCD 就是利用这个长期的 Token 进行自动部署的。
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: build-robot-secret
+  annotations:
+    kubernetes.io/service-account.name: build-robot
+type: kubernetes.io/service-account-token
+EOF
+```
+
+此外，还可以给 Deployment 指定的 serviceaccount，这个 token 就会自动挂载到对应的 pod 里面去，使得该 Pod 也可以访问自己的集群 API。
+
 ## Reference
 
 1. [https://llussy.github.io/2019/12/12/kube-proxy-IPVS/](https://llussy.github.io/2019/12/12/kube-proxy-IPVS/)
