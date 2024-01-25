@@ -1,6 +1,6 @@
 ---
 layout: default
-title: N问Kubernetes
+title: Kubernetes的若干问题
 date: 2023-12-25 22:06 +0800
 categories: kubernetes
 ---
@@ -60,6 +60,40 @@ ipvsadm -Ln
 `kubectl exec`的时候加上`-v=7`就可以看到，kubectl 实际上是与 Kubernetes master API 建立 SPDY，然后请求 Kubelet 在相应 Pod 中的容器上执行指定的命令。Kubelet 通过 CRI 的 API 与容器进行通信，建立连接后，加入到对应 pod 的 namespace，再返回 response 的。
 
 <img src="/images/kubectl-exec.png" width="800px">
+
+下面是我本地执行`kubectl exec`时候的输出
+
+```bash
+k -v=7 exec -n default nginx-64df649984-bzlzz -- env
+I0125 10:40:53.922218   20776 loader.go:395] Config loaded from file:  /Users/admin/.kube/config
+I0125 10:40:53.946960   20776 round_trippers.go:463] GET https://127.0.0.1:6443/api/v1/namespaces/default/pods/nginx-64df649984-bzlzz
+I0125 10:40:53.946987   20776 round_trippers.go:469] Request Headers:
+I0125 10:40:53.947019   20776 round_trippers.go:473]     Accept: application/json, */*
+I0125 10:40:53.947027   20776 round_trippers.go:473]     User-Agent: kubectl/v1.28.4 (darwin/amd64) kubernetes/bae2c62
+I0125 10:40:54.076624   20776 round_trippers.go:574] Response Status: 200 OK in 129 milliseconds
+I0125 10:40:54.081344   20776 podcmd.go:88] Defaulting container name to nginx
+I0125 10:40:54.081751   20776 round_trippers.go:463] POST https://127.0.0.1:6443/api/v1/namespaces/default/pods/nginx-64df649984-bzlzz/exec?command=env&container=nginx&stderr=true&stdout=true
+I0125 10:40:54.081763   20776 round_trippers.go:469] Request Headers:
+I0125 10:40:54.081771   20776 round_trippers.go:473]     X-Stream-Protocol-Version: v4.channel.k8s.io
+I0125 10:40:54.081778   20776 round_trippers.go:473]     X-Stream-Protocol-Version: v3.channel.k8s.io
+I0125 10:40:54.081784   20776 round_trippers.go:473]     X-Stream-Protocol-Version: v2.channel.k8s.io
+I0125 10:40:54.081790   20776 round_trippers.go:473]     X-Stream-Protocol-Version: channel.k8s.io
+I0125 10:40:54.081797   20776 round_trippers.go:473]     User-Agent: kubectl/v1.28.4 (darwin/amd64) kubernetes/bae2c62
+I0125 10:40:54.218743   20776 round_trippers.go:574] Response Status: 101 Switching Protocols in 136 milliseconds
+```
+
+如果 verbose 模式改成`v=9`，可以看到 101 通信协议改成了 SPDY 了。
+
+```bash
+I0125 10:40:23.219950   20677 round_trippers.go:553] POST https://127.0.0.1:6443/api/v1/namespaces/default/pods/nginx-64df649984-bzlzz/exec?command=env&container=nginx&stderr=true&stdout=true 101 Switching Protocols in 132 milliseconds
+I0125 10:40:23.219972   20677 round_trippers.go:570] HTTP Statistics: DNSLookup 0 ms Dial 0 ms TLSHandshake 0 ms Duration 132 ms
+I0125 10:40:23.219981   20677 round_trippers.go:577] Response Headers:
+I0125 10:40:23.219988   20677 round_trippers.go:580]     X-Stream-Protocol-Version: v4.channel.k8s.io
+I0125 10:40:23.219995   20677 round_trippers.go:580]     Connection: Upgrade
+I0125 10:40:23.220001   20677 round_trippers.go:580]     Upgrade: SPDY/3.1
+```
+
+SPDY 是一个被遗弃的协议，Kubernetes 团队在计划 1.30.0 版本中将 SPDY 升级为 websockets，[https://github.com/kubernetes/enhancements/issues/4006](https://github.com/kubernetes/enhancements/issues/4006)
 
 ## Reference
 
