@@ -1,6 +1,6 @@
 ---
 layout: default
-title: 如何通过Argo Rollouts实现金丝雀部署
+title: 如何通过Argo Rollouts实现金丝雀部署(1)
 date: 2024-03-29 23:12 +0800
 categories: argo
 ---
