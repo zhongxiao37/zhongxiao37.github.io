@@ -166,7 +166,7 @@ kubectl argo rollouts abort rollouts-demo
 
 一般来说，金丝雀就是要把一丢丢流量丢给新版本进行测试，但是我不想这样做，我更希望等我测试完毕之后再切流量过去。这点也可以按照[文档的配置](https://argoproj.github.io/argo-rollouts/features/specification/)实现。
 
-按照下面的配置，新版本来了之后，会有一个新的 pod 拉起来，并且通过 Header 来切流量到新的 Pod。
+按照下面的配置，新版本来了之后，会有一个新的 pod 拉起来，并且通过 Header/Cookie 来切流量到新的 Pod。
 
 ```yaml
 spec:
@@ -188,6 +188,7 @@ spec:
           additionalIngressAnnotations:
             canary-by-header: X-Canary
             canary-by-header-value: iwantsit
+            canary-by-cookie: Canary
 ```
 
 ## 背后的原因

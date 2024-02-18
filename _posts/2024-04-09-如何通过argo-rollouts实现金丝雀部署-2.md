@@ -7,6 +7,55 @@ categories: argo
 
 继上一步实现了 Argo Rollout 切分流量搭配金丝雀部署之后，我打算引入自动化测试进行版本验证，当自动化验证通过之后，则自动部署新的版本。
 
+## Selenium 测试脚本
+
+创建一个 Selenium 的测试脚本，
+
+```python
+from selenium import webdriver
+
+
+def test_canary():
+    options = webdriver.ChromeOptions()
+    options.add_argument('ignore-certificate-errors')
+    driver = webdriver.Remote(
+      command_executor='http://selenium-hub.selenium:4444/wd/hub',
+      options=options
+    )
+    driver.get("https://rollouts-demo.dev")
+    driver.add_cookie({'name': 'Canary', 'value': 'always'})
+    driver.get("https://rollouts-demo.dev")
+    assert "red" in driver.page_source
+    driver.quit()
+
+
+def test_stable():
+    options = webdriver.ChromeOptions()
+    options.add_argument('ignore-certificate-errors')
+    driver = webdriver.Remote(
+      command_executor='http://selenium-hub.selenium:4444/wd/hub',
+      options=options
+    )
+    driver.get("https://rollouts-demo.dev")
+    driver.add_cookie({'name': 'Canary', 'value': 'never'})
+    driver.get("https://rollouts-demo.dev")
+    assert "yellow" in driver.page_source
+    driver.quit()
+
+```
+
+再 build 一个 Docker 镜像
+
+```Dockerfile
+FROM python:3.10.13-slim
+
+RUN pip install pytest selenium
+
+WORKDIR /pytest
+
+COPY test_bvt.py .
+```
+
 ## 创建验证模版
 
 首先创建一个 AnalysisTemplate，用来定义触发的脚本和使用的镜像。
@@ -33,8 +82,8 @@ spec:
               spec:
                 containers:
                   - name: test
-                    image: busybox:latest
-                    command: ["echo", "{{args.svc-name}}"]
+                    image: selenium-py310:latest
+                    command: ["pytest", "."]
                 restartPolicy: Never
 ```
 
@@ -102,6 +151,17 @@ Replicas:
   Updated:       1
   Ready:         3
   Available:     3
+```
+
+这个 Job 会执行`pytest .`命令，触发自动化测试。查看 Job 的日志，会发现自动化脚本已经执行成功，所以测试均通过。
+
+```bash
+============================= test session starts ==============================
+platform linux -- Python 3.10.13, pytest-8.0.1, pluggy-1.4.0
+rootdir: /pytest
+collected 2 items
+test_bvt.py ..                                                           [100%]
+============================== 2 passed in 12.53s ==============================
 ```
 
 一旦 Job completed 之后，就会 promote 新的版本。
