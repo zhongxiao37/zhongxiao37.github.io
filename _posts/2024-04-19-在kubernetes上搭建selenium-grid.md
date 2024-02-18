@@ -7,6 +7,12 @@ categories: selenium
 
 本文是基于 Kubernetes[官网的示例][1]搭建的，只是重新用 Kustomize 排版了一下。
 
+## Selenium Grid
+
+Selenium
+
+## Kustomize 脚本
+
 ```yml
 # namespace-selenium.yml
 apiVersion: v1
@@ -152,6 +158,27 @@ resources:
 
 ```bash
 k port-forward svc/selenium-hub -n selenium 4444:4444
+```
+
+## 测试
+
+利用本地 forward 出来的 4444 端口，运行下面的 Python 脚本，就可以在 Selenium Node 上执行脚本了。
+
+```python
+from selenium import webdriver
+
+def check_browser(browser):
+  options = webdriver.ChromeOptions()
+  driver = webdriver.Remote(
+    command_executor='http://localhost:4444/wd/hub',
+    options=options
+  )
+  driver.get("http://www.google.com")
+  assert "google" in driver.page_source
+  driver.quit()
+  print("Browser %s checks out!" % browser)
+
+check_browser("CHROME")
 ```
 
 [1]: https://github.com/kubernetes/examples/blob/master/staging/selenium/README.md
