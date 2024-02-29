@@ -43,7 +43,7 @@ ClusterIP 是能够在集群内部互相访问的模式，一般 IP 是 192.168.
 
 ## Ingress Controller
 
-LoadBalancer 虽然好，但是破贵。Ingress Controller 就支持多个 service 的反向代理，支持 7 层协议。这样，就一个 Ingress Controller，就可以访问不同的 Service 了。
+LoadBalancer 虽然好，但是破浪费，一个 Service 需要一个 LoadBalancer。Ingress Controller 就支持多个 service 的反向代理，支持 7 层协议。这样，就一个 Ingress Controller，就可以访问不同的 Service 了。
 
 <img src="/images/kubernetes_ingress.png" width="800px">
 
