@@ -105,9 +105,9 @@ type: kubernetes.io/service-account-token
 
 我的第一版是用Express作为后端，Next.JS作为前端。但是，我只是将Next.JS作为打包成为JS的工具，现在想想，Vite应该是更适合干这样的事情。
 
-后来，Next.JS的全栈功能吸引了我。有过Rails开发经验的我，想看看Next.JS是如何实现的。用一个语言实现前后端还是觉得有点纠结：
+后来，Next.JS的全栈功能吸引了我。有过Rails开发经验的我，想看看Next.JS是如何实现的。用一个语言实现前后端还是觉得有点怪：
 
-1. 对于纯前端开发来说，后端不是单纯的HTML + CSS，需要和数据库，网络，多个微服务打交道。
-2. 有些包只能够在NodeJS环境中运行，如果在前端引入会报错。尤其是Next.JS默认是Server Side Component，除非自己显示写`use client`。
-3. Next.JS做了SEO优化，在build是时候，会尝试去缓存这些页面/API的结果。我不希望它去缓存API的结果，因为这样会导致每次API的结果都是一样的。
+1. 对于纯前端开发来说，后端不是单纯的HTML + CSS，需要和数据库，网络，多个微服务打交道。需要学习的东西其实还是很多的。
+2. 有些包只能够在NodeJS环境中运行，如果在前端引入会报错。尤其是Next.JS默认是Server Side Component，除非自己显示写`use client`。最简单的例子就是React.useState只能够在前端运行，使用这个的页面需要声明`use client`。
+3. Next.JS做了SEO优化，在build是时候，会尝试去缓存这些页面/API的结果。我不希望它去缓存API的结果，因为这样会导致每次API的结果都是一样的。解决方法是引入`unstable_noStore`。
 
