@@ -68,7 +68,7 @@ yarn test --grep @pws
 
 ### 切片执行测试
 
-看了一下Python，发现基本不支持分布式执行测试。之前Selenium上有Selenium Grid，PlayWright上就直接分片测试，这样就可以在多个容器上执行。
+看了一下Python，发现[pytest-xdist](https://github.com/pytest-dev/pytest-xdist)基本不支持分布式执行测试。之前Selenium上有Selenium Grid，PlayWright上就直接分片测试，这样就可以在多个容器上执行。
 
 ```bash
 yarn test --reporter=blob --shard=1/3
