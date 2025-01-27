@@ -1,7 +1,7 @@
 ---
 layout: default
 title: PlayWright快速入门
-date: 2025-01-09 17:19 +0800
+date: 2025-02-09 17:19 +0800
 categories: playwright
 ---
 
