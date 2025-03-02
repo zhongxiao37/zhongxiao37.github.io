@@ -20,7 +20,7 @@ Mac上可以通过修改`/etc/exports`文件来启动NFS，但是文件格式却
 
 ```bash
 Exports list on localhost:
-/Users/pzhong/Documents/github/wallets/local/nfs-data Everyone
+/tmp/nfs-data Everyone
 ```
 
 `rpcinfo -p`会输出NFSD对应的端口和协议
@@ -101,6 +101,8 @@ mount.nfs: trying 198.19.249.3 prog 100005 vers 3 prot UDP port 865
 Linux上安装`apt install nfs-kernel-server`，创建`/etc/exports`文件，通过`systemctl enable nfs-kernel-server`和`systemctl restart nfs-kernel-server`启动NFS即可。
 
 
+下面的Linux下的`/etc/exports`文件
+
 ```bash
 /tmp/nfs_data *(rw,sync,no_subtree_check,all_squash,anonuid=0,anongid=0)
 ```
@@ -115,4 +117,44 @@ Mac上不能够挂载虚拟机中的NFS文件夹，现在看上去是跨网段�
 ```bash
 mount_nfs: can't mount /tmp/nfs_data from 198.19.249.104 onto /private/tmp/nfs_data: Operation not permitted
 mount: /private/tmp/nfs_data failed with 1
+```
+
+## 挂入Kubernetes
+
+在Kubernetes里面，默认支持NFS。所以直接挂载成PersistentVolume，然后通过PVC挂入Deployment即可。以后想要修改啥，就直接放到NAS上，这样就可以直接挂进Kubernetes里面。
+
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: synology-nas-pv
+spec:
+  capacity:
+    storage: 20Gi  # 按实际大小调整
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain  # 建议设置为 Retain 避免数据误删
+  storageClassName: nfs-client  # 添加这行，与 PVC 的 storageClassName 匹配
+  mountOptions:
+    - hard
+    - nfsvers=3  # 根据群晖支持的 NFS 版本调整（通常 3 或 4）
+    - tcp
+    - nolock
+  nfs:
+    path: /volume1/docker/macmini  # 替换为群晖的 NFS 路径
+    server: 192.168.51.123 # 群晖 NAS 的 IP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: synology-nas-pvc
+spec:
+  storageClassName: nfs-client
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  volumeName: synology-nas-pv
 ```
