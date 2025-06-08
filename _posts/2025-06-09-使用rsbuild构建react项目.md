@@ -79,6 +79,12 @@ bun run dev
 <img src="/images/rsbuild_react.png" style="width: 800px;" />
 
 
+### 引入Redux
+
+在团队比较小的时候，不推荐引入Redux。但如果为了学习(炫技)，可以参考下面的repo，引入Redux Toolkit。其实，在只有一个计数器组件或者单个页面的情况下，`useState`都够用了。
+
+[https://github.com/zhongxiao37/from-react-to-aggressive](https://github.com/zhongxiao37/from-react-to-aggressive)
+
 ## Vite
 
 ### 初始化 Vite 项目
