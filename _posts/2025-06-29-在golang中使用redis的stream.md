@@ -81,7 +81,7 @@ func consumer(consumerName string) {
 
 ```
 
-通过 `redis-cli` `XADD my-stream * message "hello from cli"` 就可以往 stream 里面塞消息了。然后脚本里面的消费者就开始消费消息，并打印出日志。
+通过 `redis-cli` `XADD my-stream '*' message "hello from cli"` 就可以往 stream 里面塞消息了。然后脚本里面的消费者就开始消费消息，并打印出日志。
 
 通过 `XREADGROUP GROUP my-group consumer-checker COUNT 1000 STREAMS my-stream > ` 就可以查看 `my-stream` 里面有多少消息未被消费。
 
@@ -116,3 +116,5 @@ STREAMS my-stream >: 这是关键，我们只读取 my-stream 中所有的新消
 ```
 
 通过 `XRANGE my-stream - +` 可以查看到 Stream 里面的所有未消费的信息。
+
+如果有消息未回，这些消息会进入 PENDING 列表，可以通过 `redis-cli XPENDING my-stream my-group - + 100` 进行查看。
