@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 本地搭建Mattermost
-date: 2026-02-19 10:37 +0800
+date: 2025-09-09 10:37 +0800
 categories: mattermost
 ---
 
