@@ -5,7 +5,7 @@ date: 2025-11-29 18:11 +0800
 categories: git
 ---
 
-<img src="/images/git-branching-strategy.png" style="width: 100%;" />
+<img src="/images/git-branching-strategy.jpg" style="width: 100%;" />
 
 在现代软件开发中，选择合适的 Git 分支策略对于团队的协作效率和交付质量至关重要。经典的 Git Flow 虽然严谨，但往往显得过于繁重；而纯粹的 GitHub Flow 或主干开发（Trunk-Based Development）在面对复杂的测试和发布窗口管控时，又可能显得有些力不从心。
 
