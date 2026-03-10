@@ -8,6 +8,7 @@ categories: rails esbuild
 ## Install jsbunding-rails
 
 Update the Gemfile
+
 ```ruby
 gem 'jsbunding-rails'
 ```
@@ -21,12 +22,10 @@ rails javascript:install:esbuild
 
 这个命令会做几件事，其中
 
-1. 安装foreman。具体可以查看bin/dev和Procfile.dev这两个文件。项目目录下执行`bin/dev`就可以运行项目。
-2. 安装esbuild。可以在package.json里面找到。
-
+1. 安装 foreman。具体可以查看 bin/dev 和 Procfile.dev 这两个文件。项目目录下执行`bin/dev`就可以运行项目。
+2. 安装 esbuild。可以在 package.json 里面找到。
 
 ## Swap javascript_pack_tag to javascript_include_tag
-
 
 ## Install stimulus
 
@@ -34,12 +33,10 @@ rails javascript:install:esbuild
 rails stimulus:install
 ```
 
-
 ## Remove webpack
 
 1. remove `gem 'webpacker', '~> 5.4'` from Gemfile
 2. remove webpack related package in package.json
-
 
 ## Test stimulus
 
@@ -53,7 +50,6 @@ export default class extends Controller {
     console.log("Hello Stimulus...");
   }
 }
-
 ```
 
 create html file
@@ -66,10 +62,9 @@ h1[data-controller='hello']
     </svg>
 ```
 
-然后启动项目，点击按钮，在console里面就可以看到log了。
-
+然后启动项目，点击按钮，在 console 里面就可以看到 log 了。
 
 ### Reference
 
 1. [https://dev.to/thomasvanholder/how-to-migrate-from-webpacker-to-jsbundling-rails-esbuild-5f2](https://dev.to/thomasvanholder/how-to-migrate-from-webpacker-to-jsbundling-rails-esbuild-5f2)
-
+2. [https://makandracards.com/makandra/509498-add-esbuild-rails-asset-pipeline](https://makandracards.com/makandra/509498-add-esbuild-rails-asset-pipeline)
