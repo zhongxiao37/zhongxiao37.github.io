@@ -5,8 +5,6 @@ date: 2026-02-19 22:08 +0800
 categories: cloudflare
 ---
 
-# 在 Cloudflare 上免费打造零成本的 Scrum Poker
-
 <img src="/images/cloudpoker.jpg" style="width: 100%;" />
 
 作为开发者，我们每两周都要进行一次 Sprint Planning。每次估点时，找一个免费、好用、不用注册的 Scrum Poker 工具简直像是在寻宝。市面上的工具要么广告满天飞，要么强制你注册账号。
