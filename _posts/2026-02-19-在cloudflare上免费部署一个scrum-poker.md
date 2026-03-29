@@ -9,13 +9,13 @@ categories: cloudflare
 
 作为开发者，我们每两周都要进行一次 Sprint Planning。每次估点时，找一个免费、好用、不用注册的 Scrum Poker 工具简直像是在寻宝。市面上的工具要么广告满天飞，要么强制你注册账号。
 
-我之前用过 [poker4fun](https://just4fun.github.io/projects/poker4fun/)，体验不错，但我决定用现代技术栈自己造一个轮子，并且**一分钱都不花**。今天，我将带你利用 Cloudflare 的免费层级（Pages + Workers + Durable Objects），部署一个属于你自己的实时多人敏捷估点工具——CloudPoker。
+我之前用过 [poker4fun](https://just4fun.github.io/projects/poker4fun/)，体验不错，但我决定用现代技术栈自己造一个轮子，并且**一分钱都不花**。今天，我将带你利用 Cloudflare 的免费层级（Pages + Workers + Durable Objects），部署一个属于你自己的实时多人敏捷估点工具——[CloudPoker](https://poker-11s.pages.dev/)。
 
 ## 1. 什么是 CloudPoker？
 
-简单来说，CloudPoker 是一个无服务器（Serverless）的实时估点应用。
+简单来说，[CloudPoker](https://poker-11s.pages.dev/) 是一个无服务器（Serverless）的实时估点应用。
 
-如果把传统的 WebSocket 服务器比作一家**24 小时营业、灯火通明但大部分时间没客人的餐厅**（你需要为闲置的服务器付费），那么 CloudPoker 就像是一个**魔法帐篷**：当你们团队开始估点时，帐篷瞬间在离你们最近的边缘节点搭好；估点结束大家离开后，帐篷立刻折叠消失，不消耗任何计算资源。
+如果把传统的 WebSocket 服务器比作一家**24 小时营业、灯火通明但大部分时间没客人的餐厅**（你需要为闲置的服务器付费），那么 [CloudPoker](https://poker-11s.pages.dev/) 就像是一个**魔法帐篷**：当你们团队开始估点时，帐篷瞬间在离你们最近的边缘节点搭好；估点结束大家离开后，帐篷立刻折叠消失，不消耗任何计算资源。
 
 ## 2. 为什么我们需要这种架构？
 
@@ -181,4 +181,4 @@ if (request.method === "OPTIONS") {
 
 ---
 
-通过这套架构，我们不仅白嫖了 Cloudflare 的全球网络，还顺便学习了现代 Serverless WebSocket 的最佳实践。下次 Sprint Planning 时，直接丢给团队一个你专属的 CloudPoker 链接吧！
+通过这套架构，我们不仅白嫖了 Cloudflare 的全球网络，还顺便学习了现代 Serverless WebSocket 的最佳实践。下次 Sprint Planning 时，直接丢给团队一个你专属的 [CloudPoker](https://poker-11s.pages.dev/) 链接吧！
