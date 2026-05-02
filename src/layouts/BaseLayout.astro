@@ -1,0 +1,185 @@
+---
+import { getCollection } from 'astro:content';
+import { postCategories } from '../utils/postPath.js';
+
+const { title, description } = Astro.props;
+const siteTitle = 'Zhongxiao37';
+const siteDescription = '花卷花卷花式卷';
+
+// Build category counts for right sidebar
+const allPosts = await getCollection('blog');
+const tagCount = {};
+allPosts.forEach(post => {
+  if (!post.data.date || !post.data.title) return;
+  postCategories(post.data).forEach(cat => {
+    tagCount[cat] = (tagCount[cat] ?? 0) + 1;
+  });
+});
+const tags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]);
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description ?? siteDescription} />
+    <title>{title ? `${title} | ${siteTitle}` : siteTitle}</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.css" />
+    <link rel="stylesheet" href="/assets/css/header.css" />
+    <style>
+      body { background: #f8f9fa; }
+      .site-header {
+        background-image: url("/images/header_background.jpg");
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 5rem 0 4rem;
+        margin-bottom: 0;
+      }
+      .site-header h1 a { color: white; text-decoration: none; font-size: 1.8rem; font-weight: 700; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+      .site-header h1 a:hover { opacity: 0.85; }
+      .site-header p { color: rgba(255,255,255,0.85); margin: 0.25rem 0 0; font-size: 0.95rem; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+      .layout-grid {
+        display: grid;
+        grid-template-columns: 180px 1fr 220px;
+        gap: 1.5rem;
+        max-width: 1648px;
+        margin: 1.5rem auto;
+        padding: 0 1rem;
+      }
+      /* Left sidebar */
+      .sidebar-left {
+        position: sticky;
+        top: 1rem;
+        align-self: start;
+      }
+      .sidebar-left nav {
+        background: white;
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      }
+      .sidebar-left nav a {
+        display: block;
+        padding: 0.5rem 0.75rem;
+        color: #444;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 0.95rem;
+        transition: background 0.15s;
+      }
+      .sidebar-left nav a:hover { background: #f0f4ff; color: #3498db; }
+      .sidebar-left nav a.active { background: #eaf2ff; color: #2980b9; font-weight: 600; }
+      /* Main content */
+      .main-content {
+        min-width: 0;
+      }
+      /* Right sidebar */
+      .sidebar-right {
+        position: sticky;
+        top: 1rem;
+        align-self: start;
+      }
+      .sidebar-right .widget {
+        background: white;
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        margin-bottom: 1rem;
+      }
+      .sidebar-right .widget h3 {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #888;
+        margin: 0 0 0.75rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eee;
+      }
+      .tag-cloud { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+      .tag-cloud a {
+        display: inline-block;
+        padding: 0.2rem 0.5rem;
+        background: #f0f4f8;
+        border-radius: 4px;
+        color: #555;
+        text-decoration: none;
+        font-size: 0.78rem;
+        transition: background 0.15s;
+      }
+      .tag-cloud a:hover { background: #dbeafe; color: #2563eb; }
+      .tag-cloud .count { color: #aaa; font-size: 0.72rem; }
+      /* Search box */
+      #tag-search {
+        width: 100%;
+        padding: 0.4rem 0.6rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 0.85rem;
+        margin-bottom: 0.6rem;
+        box-sizing: border-box;
+      }
+      #tag-search:focus { outline: none; border-color: #3498db; }
+      /* Responsive */
+      @media (max-width: 900px) {
+        .layout-grid { grid-template-columns: 1fr; }
+        .sidebar-left, .sidebar-right { position: static; }
+        .sidebar-left nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .sidebar-left nav a { padding: 0.35rem 0.75rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="site-header">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+        <h1><a href="/">{siteTitle}</a></h1>
+        <p>{siteDescription}</p>
+      </div>
+    </div>
+
+    <div class="layout-grid">
+      <!-- Left sidebar: navigation -->
+      <aside class="sidebar-left">
+        <nav>
+          <a href="/">Home</a>
+          <a href="/categories/">Categories</a>
+          <a href="/about/">About</a>
+        </nav>
+      </aside>
+
+      <!-- Main content -->
+      <main class="main-content">
+        <slot />
+      </main>
+
+      <!-- Right sidebar: category quick search -->
+      <aside class="sidebar-right">
+        <div class="widget">
+          <h3>Categories</h3>
+          <input type="text" id="tag-search" placeholder="Search…" autocomplete="off" />
+          <div class="tag-cloud" id="tag-cloud">
+            {tags.map(([tag, count]) => (
+              <a href={`/categories/${tag}/`} data-tag={tag}>
+                {tag} <span class="count">({count})</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <script>
+      const input = document.getElementById('tag-search');
+      const cloud = document.getElementById('tag-cloud');
+      if (input && cloud) {
+        input.addEventListener('input', () => {
+          const q = input.value.toLowerCase();
+          cloud.querySelectorAll('a').forEach(a => {
+            const match = a.dataset.tag.toLowerCase().includes(q);
+            a.style.display = match ? '' : 'none';
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

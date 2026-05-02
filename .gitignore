@@ -11,7 +11,11 @@ Thumbs.db
 
 .rbenv-version
 .rvmrc
-*.yml
+_config.yml
+Gemfile.lock
+dist/
+node_modules/
+.astro/
 .CLAUDE.md
 .claude
 .cursor

@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { postSlugPath, postCategories } from '../utils/postPath.js';
+
+const allPosts = await getCollection('blog');
+const posts = allPosts
+  .filter(p => p.data.date && p.data.title)
+  .sort((a, b) => b.data.date - a.data.date);
+
+// Extract leading image (only if it's the very first non-empty line) and plain-text excerpt
+function getPreview(body = '') {
+  const firstLine = body.split('\n').map(l => l.trim()).find(l => l.length > 0) ?? '';
+
+  // Support both Markdown ![](url) and HTML <img src="url">
+  const mdImg = firstLine.match(/^!\[.*?\]\((.*?)\)$/);
+  const htmlImg = firstLine.match(/^<img\s[^>]*src=["']([^"']+)["']/i);
+  const image = (mdImg ?? htmlImg)?.[1] ?? null;
+
+  // Strip markdown + HTML for excerpt
+  const text = body
+    .replace(/^---[\s\S]*?---/, '')        // frontmatter (safety)
+    .replace(/```[\s\S]*?```/g, '')         // code blocks
+    .replace(/`[^`]+`/g, '')               // inline code
+    .replace(/<[^>]+>/g, '')               // HTML tags
+    .replace(/!\[.*?\]\(.*?\)/g, '')        // markdown images
+    .replace(/\[([^\]]+)\]\(.*?\)/g, '$1') // links → text
+    .replace(/#{1,6}\s+/g, '')             // headings
+    .replace(/[*_~>|]/g, '')               // emphasis / blockquote / table
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const excerpt = text.slice(0, 150) + (text.length > 150 ? '…' : '');
+  return { image, excerpt };
+}
+---
+
+<BaseLayout>
+  <style>
+    .post-list { list-style: none; padding: 0; margin: 0; }
+    .post-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: box-shadow 0.15s;
+    }
+    .post-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+    .post-card-inner { display: flex; gap: 1rem; padding: 1rem 1.25rem; }
+    .post-card-thumb {
+      flex-shrink: 0;
+      width: 100px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 5px;
+      background: #eee;
+    }
+    .post-card-body { min-width: 0; }
+    .post-card-meta {
+      font-size: 0.78rem;
+      color: #999;
+      margin-bottom: 0.3rem;
+    }
+    .post-card-meta a {
+      color: #888;
+      text-decoration: none;
+      margin-left: 0.4rem;
+    }
+    .post-card-meta a:hover { color: #3498db; }
+    .post-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 0.35rem;
+      line-height: 1.4;
+    }
+    .post-card-title a { color: #222; text-decoration: none; }
+    .post-card-title a:hover { color: #3498db; }
+    .post-card-excerpt {
+      font-size: 0.85rem;
+      color: #666;
+      line-height: 1.5;
+      margin: 0;
+    }
+  </style>
+
+  <ul class="post-list">
+    {posts.map(post => {
+      const path = postSlugPath(post.id, post.data.date);
+      const cats = postCategories(post.data);
+      const { image, excerpt } = getPreview(post.body);
+      return (
+        <li class="post-card">
+          <div class="post-card-inner">
+            {image && <img class="post-card-thumb" src={image} alt="" loading="lazy" />}
+            <div class="post-card-body">
+              <div class="post-card-meta">
+                {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+                {cats.slice(0, 3).map(c => (
+                  <a href={`/categories/${c}/`}>#{c}</a>
+                ))}
+              </div>
+              <h2 class="post-card-title">
+                <a href={`/blog/${path}/`}>{post.data.title}</a>
+              </h2>
+              {excerpt && <p class="post-card-excerpt">{excerpt}</p>}
+            </div>
+          </div>
+        </li>
+      );
+    })}
+  </ul>
+</BaseLayout>

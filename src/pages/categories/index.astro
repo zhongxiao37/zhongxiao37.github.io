@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { postCategories } from '../../utils/postPath.js';
+
+const allPosts = await getCollection('blog');
+
+const tagCount = {};
+allPosts.forEach(post => {
+  if (!post.data.date || !post.data.title) return;
+  postCategories(post.data).forEach(cat => {
+    tagCount[cat] = (tagCount[cat] ?? 0) + 1;
+  });
+});
+
+const tags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout title="Categories">
+  <h1>Categories</h1>
+  <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+    {tags.map(([tag, count]) => (
+      <li>
+        <a href={`/categories/${tag}/`} style="padding: 0.25rem 0.6rem; background: #f0f0f0; border-radius: 4px; text-decoration: none; font-size: 0.9em;">
+          {tag} <span style="color: #888;">({count})</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

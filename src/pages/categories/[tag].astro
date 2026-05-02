@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { postSlugPath, postCategories } from '../../utils/postPath.js';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+
+  const tagMap = {};
+  allPosts.forEach(post => {
+    if (!post.data.date || !post.data.title) return;
+    postCategories(post.data).forEach(cat => {
+      if (!tagMap[cat]) tagMap[cat] = [];
+      tagMap[cat].push(post);
+    });
+  });
+
+  return Object.entries(tagMap).map(([tag, posts]) => ({
+    params: { tag },
+    props: { tag, posts },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+const sorted = [...posts].sort((a, b) => b.data.date - a.data.date);
+---
+
+<BaseLayout title={`#${tag}`}>
+  <h1>#{tag}</h1>
+  <p><a href="/categories/">← All categories</a></p>
+  <ul style="list-style: none; padding: 0;">
+    {sorted.map(post => {
+      const path = postSlugPath(post.id, post.data.date);
+      return (
+        <li style="margin-bottom: 0.75rem;">
+          <span style="color: #888; font-size: 0.9em; margin-right: 0.75rem;">
+            {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+          </span>
+          <a href={`/blog/${path}/`}>{post.data.title}</a>
+        </li>
+      );
+    })}
+  </ul>
+</BaseLayout>
