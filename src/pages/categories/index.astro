@@ -18,11 +18,11 @@ const tags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]);
 
 <BaseLayout title="Categories">
   <h1>Categories</h1>
-  <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+  <ul class="list-none p-0 flex flex-wrap gap-2">
     {tags.map(([tag, count]) => (
       <li>
-        <a href={`/categories/${tag}/`} style="padding: 0.25rem 0.6rem; background: #f0f0f0; border-radius: 4px; text-decoration: none; font-size: 0.9em;">
-          {tag} <span style="color: #888;">({count})</span>
+        <a href={`/categories/${tag}/`} class="inline-block px-2 py-1 bg-gray-100 rounded text-sm no-underline hover:bg-blue-100 hover:text-blue-600">
+          {tag} <span class="text-gray-400">({count})</span>
         </a>
       </li>
     ))}

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { postCategories } from '../utils/postPath.js';
+import '../styles/global.css';
 
 const { title, description } = Astro.props;
 const siteTitle = 'Zhongxiao37';
@@ -24,10 +25,7 @@ const tags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description ?? siteDescription} />
     <title>{title ? `${title} | ${siteTitle}` : siteTitle}</title>
-    <link rel="stylesheet" href="/assets/css/bootstrap.css" />
-    <link rel="stylesheet" href="/assets/css/header.css" />
     <style>
-      body { background: #f8f9fa; }
       .site-header {
         background-image: url("/images/header_background.jpg");
         background-size: cover;
@@ -68,8 +66,8 @@ const tags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]);
         font-size: 0.95rem;
         transition: background 0.15s;
       }
-      .sidebar-left nav a:hover { background: #f0f4ff; color: #3498db; }
-      .sidebar-left nav a.active { background: #eaf2ff; color: #2980b9; font-weight: 600; }
+      .sidebar-left nav a:hover { background: #fdf6e3; color: #a0832a; }
+      .sidebar-left nav a.active { background: #faefd0; color: #8a6e1e; font-weight: 600; }
       /* Main content */
       .main-content {
         min-width: 0;
@@ -107,7 +105,7 @@ const tags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]);
         font-size: 0.78rem;
         transition: background 0.15s;
       }
-      .tag-cloud a:hover { background: #dbeafe; color: #2563eb; }
+      .tag-cloud a:hover { background: #faefd0; color: #8a6e1e; }
       .tag-cloud .count { color: #aaa; font-size: 0.72rem; }
       /* Search box */
       #tag-search {
@@ -119,7 +117,7 @@ const tags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]);
         margin-bottom: 0.6rem;
         box-sizing: border-box;
       }
-      #tag-search:focus { outline: none; border-color: #3498db; }
+      #tag-search:focus { outline: none; border-color: #c9a84c; }
       /* Responsive */
       @media (max-width: 900px) {
         .layout-grid { grid-template-columns: 1fr; }

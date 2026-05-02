@@ -21,10 +21,10 @@ const cats = postCategories(post.data);
 <BaseLayout title={post.data.title}>
   <article>
     <h1>{post.data.title}</h1>
-    <p style="color: #888; font-size: 0.9em;">
+    <p class="text-gray-400 text-sm mb-6">
       {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}
       {cats.length > 0 && (
-        <span style="margin-left: 0.5rem;">
+        <span class="ml-2">
           {cats.map((c, i) => (
             <span>
               {i > 0 && ', '}
@@ -34,6 +34,8 @@ const cats = postCategories(post.data);
         </span>
       )}
     </p>
-    <Content />
+    <div class="prose prose-lg max-w-none">
+      <Content />
+    </div>
   </article>
 </BaseLayout>

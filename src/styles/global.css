@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body  { background-color: #f8f9fa; color: #212529; font-size: 1rem; line-height: 1.5; }
+  h1, h2, h3, h4 { color: #c9a84c; }
+  h1    { font-size: 2rem;    font-weight: 700; margin-bottom: 0.5rem; }
+  h2    { font-size: 1.5rem;  font-weight: 600; margin-bottom: 0.5rem; }
+  h3    { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+  a     { color: #c9a84c; }
+  a:hover { color: #a0832a; }
+}

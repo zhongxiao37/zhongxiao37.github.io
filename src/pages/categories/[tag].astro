@@ -28,12 +28,12 @@ const sorted = [...posts].sort((a, b) => b.data.date - a.data.date);
 <BaseLayout title={`#${tag}`}>
   <h1>#{tag}</h1>
   <p><a href="/categories/">← All categories</a></p>
-  <ul style="list-style: none; padding: 0;">
+  <ul class="list-none p-0">
     {sorted.map(post => {
       const path = postSlugPath(post.id, post.data.date);
       return (
-        <li style="margin-bottom: 0.75rem;">
-          <span style="color: #888; font-size: 0.9em; margin-right: 0.75rem;">
+        <li class="mb-3">
+          <span class="text-gray-400 text-sm mr-3">
             {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}
           </span>
           <a href={`/blog/${path}/`}>{post.data.title}</a>
