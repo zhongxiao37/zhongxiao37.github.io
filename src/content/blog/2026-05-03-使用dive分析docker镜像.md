@@ -4,24 +4,56 @@ date: 2026-05-19 11:04 +0800
 categories: docker
 ---
 
-## 问题
+## 什么是 Dive？
 
-最近遇到一个问题，在 Bamboo Agent 上面发现自己的 Docker 镜像居然有 6 个 G。自己怎么也觉得不应该这么大的啊？
+Dive 就像是 Docker 镜像的“X 光机”。当你构建完一个镜像后，它能帮你一层一层地透视进去，看看每一层到底增加了什么文件、浪费了多少空间。
 
-## 解决
+## 为什么我们需要 Dive？
 
-印象中之前公司有人推荐过一个 Dive 的工具，顺手也问问 AI 看有什么工具推荐，结果 AI 也推荐 Dive，那就说干就干！
+最近我遇到了一个让人头疼的情况：在 Bamboo Agent 上，我发现自己的一个 Node.js 前端项目 Docker 镜像居然膨胀到了 **6GB**！对于一个普通的 Web 应用来说，这简直是个“存储黑洞”。
 
-直接`brew install dive`之后， `dive <image_id>`就可以看到下面的 terminal 界面。
-左侧分别是 Layer 的大小，每一层的命令，以及镜像详情。右侧则是文件详情，包括每一个文件夹的大小，这一层新增文件高亮。
+如果没有合适的工具，排查这种问题就像大海捞针——你只知道镜像很大，却不知道到底是哪一行 `Dockerfile` 指令把垃圾带了进去。这时候，AI 和同事都不约而同地向我推荐了 Dive。
+
+## Dive 是如何工作的？
+
+Dive 通过解析 Docker 镜像的层级结构（Layers），将终端分成了左右两个直观的面板：
+
+1. **左侧面板**：展示了镜像的每一层（Layer）大小、对应的 Dockerfile 命令，以及镜像的整体详情（如总大小、浪费的空间比例）。
+2. **右侧面板**：展示了当前选中层的文件系统树。最棒的是，它会高亮显示这一层**新增**、**修改**或**删除**的文件。
+
+## 优缺点
+
+**优点：**
+- **直观的终端 UI**：无需复杂的命令，直接在终端里用方向键就能浏览文件树。
+- **精准定位**：能直接告诉你哪一层浪费了多少空间，甚至列出具体的文件路径。
+- **CI 集成**：支持在 CI/CD 流程中设置阈值，比如“空间浪费超过 10% 就让构建失败”。
+
+**缺点：**
+- **性能瓶颈**：对于极其庞大的镜像（比如我那个 6GB 的），Dive 在解析文件树时可能会卡死。
+
+## 真实世界的验证
+
+首先，安装并运行 Dive：
+
+```bash
+# macOS 安装
+brew install dive
+
+# 分析指定的镜像
+dive <image_id_or_name>
+```
+
+运行后，你会看到类似这样的界面：
 
 ![img](/images/dive_demo.gif)
 
-不过由于我的镜像太大，Dive 直接卡死了。但从每一层的大小可以发现一丝端倪，就是两次`yarn`操作导致镜像多次 4 个 G，后面的`COPY`操作又带进来`800MB`。
+虽然由于我的镜像太大导致 Dive 卡死了，但仅仅是通过左侧每一层的大小，我已经发现了端倪：
 
 ![img](/images/dive_issue.png)
 
-原来的 Dockerfile
+通过观察，我发现两次 `yarn` 操作导致镜像多出了近 4GB 的空间，而后面的 `COPY` 操作又带进去了 800MB。
+
+让我们看看原来的 `Dockerfile`：
 
 ```dockerfile
 FROM node:18.19.0
@@ -29,17 +61,24 @@ FROM node:18.19.0
 WORKDIR /usr/src/app
 COPY package.json yarn.lock .
 
+# 罪魁祸首 1：第一次 yarn
 RUN yarn install --frozen-lockfile
+# 罪魁祸首 2：第二次 yarn
 RUN yarn add miniprogram-ci
+# 罪魁祸首 3：COPY 进去了不该进的东西
 COPY . .
 RUN yarn build
 ```
 
-进一步发现这里有 3 个问题:
+这里暴露了三个致命问题：
 
-1. `yarn`会在用户级别保留 package 的缓存，在 project 的 node_modules 又安装了一次。最后应该用 yarn cache clean 清理用户级别的缓存。据说`yarn`在 v2 里面做了硬链接的优化，不过后来大家都倾向使用`pnpm`了。
-2. 两次`yarn`导致先创建了一个 node_modules 层，后面又创建了一个 node_modules 层，重复了许多文件。
-3. 忘记 .dockerignore 了。
+1. **Yarn 缓存机制**：`yarn` 会在用户级别（`~/.cache/yarn`）保留 package 的缓存，同时在项目的 `node_modules` 中又安装了一次。如果不清理，这些缓存会一直留在镜像里。
+2. **层级冗余**：两次 `RUN yarn` 指令创建了两个独立的镜像层。后一层又修改了 `node_modules`，导致许多文件被重复打包。
+3. **缺少 `.dockerignore`**：`COPY . .` 会把本地的 `node_modules`、日志文件等垃圾全塞进镜像。
+
+**第一步优化：合并指令与清理缓存**
+
+加上 `.dockerignore` 后，我们将多次 `RUN` 合并，并在最后清理缓存：
 
 ```dockerfile
 RUN yarn install --frozen-lockfile && \
@@ -47,27 +86,29 @@ RUN yarn install --frozen-lockfile && \
     yarn cache clean
 ```
 
-直到问题就好解决了。加上 .dockerignore，然后把两次 `yarn`合并在一起，最后`yarn cache clean`就好了，镜像压缩到了 2.6G。
+仅仅这两步，镜像就从 6GB 暴降到了 **2.6GB**！
 
-## 这样就完了？
+## 进阶排错与极致优化
 
-前不久同事安利过`--mount=type=cache`来加速 yarn install。我这里就把用户级别的 yarn cache 挂载进去，这样最后的时候都不需要`yarn cache clean`了。
+**使用 BuildKit 缓存挂载**
+
+每次都 `yarn cache clean` 还是有点傻乎乎的，而且下次构建依然很慢。我们可以使用 Docker BuildKit 的 `--mount=type=cache` 特性，把宿主机的缓存“借”给容器用，构建完就还回去，根本不会打进最终镜像。
 
 ```dockerfile
+# 挂载 yarn 缓存目录，加速安装且不增加镜像体积
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn-cache \
     yarn install --frozen-lockfile && \
     yarn add miniprogram-ci
 ```
 
-问题又来了，`--mount=type=cache`和`--mount=type=bind`有什么区别呢？`bind`一般用来替代 COPY 操作，只读，又不会把这个打进最终的镜像，比如一些 credentials 之类的。`cache`一般就是各种包的缓存，像这里就把`yarn cache`挂载进去，是可以读写的。所以这里使用`cache`。
+*注意：`--mount=type=cache` 和 `--mount=type=bind` 的区别在于，`bind` 通常用于只读挂载（如密钥、源代码），而 `cache` 是可读写的，专门用于包管理器的缓存。*
 
-最后的效果依旧还是 2.6G。
+**极致压缩：鱼和熊掌兼得**
 
-## 鱼和熊掌
-
-如果还想极致压缩镜像，还是可以如下。`yarn`的时候写入缓存，复制完项目代码之后，又挂载一次缓存`yarn build`，这样就会仅仅保留 node 镜像和 build 的产物。
+如果你的目标是极致的镜像大小，你甚至可以把 `node_modules` 也作为缓存挂载。这样，最终的镜像里只保留 Node 基础环境和 `build` 产物，连 `node_modules` 都不带！
 
 ```dockerfile
+# 将 yarn 缓存和 node_modules 都作为缓存挂载
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn-cache \
     --mount=type=cache,target=/usr/src/app/node_modules,id=node_modules-cache \
     yarn install --frozen-lockfile && \
@@ -75,6 +116,9 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn-cache \
 
 COPY . .
 
+# build 时再次挂载 node_modules 缓存
 RUN --mount=type=cache,target=/usr/src/app/node_modules,id=node_modules-cache \
     yarn build
 ```
+
+通过 Dive 的透视和 BuildKit 的加持，我们不仅找出了镜像膨胀的元凶，还掌握了更优雅的 Dockerfile 编写姿势。下次再遇到“体积焦虑”，记得先用 Dive 照一照！
